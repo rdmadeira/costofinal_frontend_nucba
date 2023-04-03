@@ -3,6 +3,6 @@ import chakraTheme from '@chakra-ui/theme';
 
 const components = chakraTheme.components;
 
-export const theme = extendBaseTheme({
+export const apptheme = extendBaseTheme({
   components: {},
 });
