@@ -1,9 +1,18 @@
-import { ChakraProvider, theme } from '@chakra-ui/react';
+import React from 'react';
+/* import { ChakraProvider } from '@chakra-ui/react'; */
+import ThemeProvider from 'react-bootstrap/ThemeProvider';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-/* import { apptheme } from './chakra/theme.js'; */
+import Header from './components/header/Header.jsx';
+import Sidebar from './components/sidebar/Sidebar.jsx';
 
 function App() {
-  return <ChakraProvider theme={apptheme}></ChakraProvider>;
+  return (
+    <ThemeProvider breakpoints={['xl', ' lg', 'md', 'sm', 'xs']}>
+      <Header />
+      <Sidebar />
+    </ThemeProvider>
+  );
 }
 
 export default App;
