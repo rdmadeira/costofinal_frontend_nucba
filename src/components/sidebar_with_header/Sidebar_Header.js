@@ -21,6 +21,8 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Button,
+  Hide,
 } from '@chakra-ui/react';
 import {
   /* FiHome,
@@ -33,7 +35,9 @@ import {
 } from 'react-icons/fi';
 import { TfiLayoutGrid3Alt, TfiLayoutGrid2 } from 'react-icons/tfi';
 import { BsCart4 } from 'react-icons/bs';
+import { RiAccountPinCircleFill } from 'react-icons/ri';
 import Logo from '../ui/Logo.jsx';
+import Main from '../../pages/Main';
 
 /* const LinkItems = [
   { name: 'Home', icon: FiHome },
@@ -43,8 +47,13 @@ import Logo from '../ui/Logo.jsx';
   { name: 'Settings', icon: FiSettings },
 ]; */
 
-export default function SidebarWithHeader({ children }) {
+export default function SidebarWithHeader() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenLogin,
+    onOpen: onOpenLogin,
+    onClose: onCloseLogin,
+  } = useDisclosure();
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
       <SidebarContent
@@ -64,9 +73,9 @@ export default function SidebarWithHeader({ children }) {
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
-      <MobileNav onOpen={onOpen} />
+      <MobileNav onOpen={onOpen} onOpenLogin={onOpenLogin} />
       <Box ml={{ base: 0, md: 60 }} p="4">
-        {children}
+        <Main isOpen={isOpenLogin} onClose={onCloseLogin} />
       </Box>
     </Box>
   );
@@ -97,7 +106,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       bg={useColorModeValue('green.50', 'gray.900')}
       borderRight="1px"
       borderRightColor={useColorModeValue('green.100', 'gray.700')}
-      w={{ base: 'full', md: 60 }}
+      w={{ base: 'full', md: 52 }}
       pos="fixed"
       h="full"
       {...rest}>
@@ -108,7 +117,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
         justifyContent="space-between"
         marginBlockEnd="10px">
         <Link href="/home" display="flex" justifyContent="center" m="20px 0">
-          <Logo width="40%" />
+          <Logo width={{ base: '20%', md: '40%' }} />
         </Link>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
@@ -116,7 +125,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
         <NavItem
           key={link.name}
           icon={link.icon}
-          fontSize="sm"
+          fontSize="xs"
           color="gray.500">
           {link.name}
         </NavItem>
@@ -159,12 +168,12 @@ const NavItem = ({ icon, children, ...rest }) => {
   );
 };
 
-const MobileNav = ({ onOpen, ...rest }) => {
+const MobileNav = ({ onOpen, onOpenLogin, user, ...rest }) => {
   return (
     <Flex
-      ml={{ base: 0, md: 60 }}
+      ml={{ base: 0, md: 52 }}
       px={{ base: 4, md: 4 }}
-      height="20"
+      height="16"
       alignItems="center"
       bg={useColorModeValue('green.50', 'gray.900')}
       borderBottomWidth="1px"
@@ -182,40 +191,55 @@ const MobileNav = ({ onOpen, ...rest }) => {
       <Logo width="8%" display={{ base: 'flex', md: 'none' }} />
 
       <HStack spacing={{ base: '0', md: '6' }}>
-        <CustomIconButton
-          size="lg"
-          variant="ghost"
-          aria-label="open menu"
-          icon={<BsCart4 />}
-        />
+        {user && (
+          <CustomIconButton
+            size="lg"
+            variant="ghost"
+            aria-label="open menu"
+            icon={<BsCart4 />}
+          />
+        )}
         <Flex alignItems={'center'}>
           <Menu>
-            <MenuButton
-              py={2}
-              transition="all 0.3s"
-              _focus={{ boxShadow: 'none' }}>
-              <HStack>
-                <Avatar
-                  size={'sm'}
-                  src={
-                    'https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
-                  }
-                />
-                <VStack
-                  display={{ base: 'none', md: 'flex' }}
-                  alignItems="flex-start"
-                  spacing="1px"
-                  ml="2">
-                  <Text fontSize="sm">{'User name'}</Text>
-                  <Text fontSize="xs" color="gray.600">
-                    Admin
-                  </Text>
-                </VStack>
-                <Box display={{ base: 'none', md: 'flex' }}>
-                  <FiChevronDown />
-                </Box>
-              </HStack>
-            </MenuButton>
+            {user ? (
+              <MenuButton
+                paddingRight={{ base: '0', md: '5' }}
+                color="gray.500"
+                transition="all 0.3s"
+                borderBottom="transparent 1px solid"
+                _focus={{ boxShadow: 'none' }}
+                _hover={{ borderBottom: 'gray 1px solid' }}>
+                <HStack>
+                  <Avatar
+                    size={'sm'}
+                    src={
+                      'https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
+                    }
+                  />
+                  <VStack
+                    display={{ base: 'none', md: 'flex' }}
+                    alignItems="flex-start"
+                    spacing="1px"
+                    ml="2">
+                    <Text fontSize="sm">{'User name'}</Text>
+                    <Text fontSize="xs" color="gray.600">
+                      Admin
+                    </Text>
+                  </VStack>
+                  <Box display={{ base: 'none', md: 'flex' }}>
+                    <FiChevronDown />
+                  </Box>
+                </HStack>
+              </MenuButton>
+            ) : (
+              <Button
+                onClick={onOpenLogin}
+                rightIcon={<RiAccountPinCircleFill />}
+                color="gray.500"
+                variant="outline">
+                {<Hide below="md">Ingresar</Hide>}
+              </Button>
+            )}
             <MenuList
               bg={useColorModeValue('white', 'gray.900')}
               borderColor={useColorModeValue('gray.200', 'gray.700')}>
