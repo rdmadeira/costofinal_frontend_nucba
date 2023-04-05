@@ -6,21 +6,23 @@ import {
   DrawerOverlay,
   DrawerHeader,
   DrawerBody,
-  DrawerFooter,
-  Button,
 } from '@chakra-ui/react';
+import SignUpForm from '../components/forms/SignUpForm';
 
 const Main = ({ isOpen, onClose }) => {
   return (
-    <Drawer isOpen={isOpen} onClose={onClose} placement="right">
+    <Drawer
+      isOpen={isOpen}
+      onClose={onClose}
+      placement="right"
+      size={{ base: 'full', md: 'md' }}>
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton onClick={onClose} />
         <DrawerHeader>INGRESE A SU CUENTA</DrawerHeader>
-        <DrawerBody>Main</DrawerBody>
-        <DrawerFooter>
-          <Button>Submit</Button>
-        </DrawerFooter>
+        <DrawerBody>
+          <SignUpForm />
+        </DrawerBody>
       </DrawerContent>
     </Drawer>
   );
