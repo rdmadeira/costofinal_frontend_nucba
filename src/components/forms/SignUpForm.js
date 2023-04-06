@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState /* , useEffect */ } from 'react';
 import {
   FormControl,
   FormLabel,
@@ -12,60 +12,81 @@ import {
 } from '@chakra-ui/react';
 import { Controller, useForm } from 'react-hook-form';
 import Input from './Input';
+import { BsCheck } from 'react-icons/bs';
+import { RxCross2 } from 'react-icons/rx';
+import { createUser } from '../../firebase/firebaseConfig';
 
 const SignUpForm = () => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
-  } = useForm({ mode: 'onSubmit', reValidateMode: 'onChange' });
-
-  const toast = useToast();
-
-  const onSubmit = (data) => {
-    console.log(data);
-
-    isSubmitSuccessful &&
-      toast({
-        title: 'Login aceptado',
-        description: 'Los datos son correctos!',
-        status: 'success',
-        isClosable: true,
-      });
-  };
+  const { register, handleSubmit, control, formState } = useForm({
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
+  });
 
   const [isLogin, setisLogin] = useState(true);
+  const [isSuccessRequest, setisSuccessRequest] = useState(null);
+  const toast = useToast();
+
+  /*  useEffect(() => {
+    console.log(formState.isSubmitting, formState.isSubmitSuccessful);
+  }, [formState]); */
+
+  const onSubmit = (data) => {
+    if (!isLogin) {
+      return createUser(data).then((res) => {
+        if (res.isSuccesful) {
+          setisSuccessRequest(true);
+          toast({
+            title: 'Cliente ' + res.message,
+            description: 'Creado con sucesso',
+            status: 'success',
+            isClosable: true,
+          });
+        } else {
+          setisSuccessRequest(false);
+          toast({
+            title: 'Email ya registrado',
+            description: res.message,
+            status: 'error',
+            isClosable: true,
+          });
+        }
+      });
+    }
+  };
 
   const inputNames = isLogin
-    ? ['username', 'password']
-    : ['username', 'password', 'nombre', 'apellido', 'dirección', 'teléfono'];
+    ? ['email', 'password']
+    : ['email', 'password', 'name', 'lastname', 'address', 'phone'];
 
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <VStack spacing={'4'}>
           {inputNames.map((name) => {
-            console.log(errors[name]);
             return (
-              <FormControl isInvalid={errors[name]} isRequired key={name}>
+              <FormControl
+                isInvalid={formState.errors[name]}
+                width="75%"
+                isRequired
+                key={name}>
                 <FormLabel htmlFor={name}>
                   {name[0].toLocaleUpperCase() + name.slice(1)}
                 </FormLabel>
                 <Controller
-                  key={name}
                   name={name}
+                  rules={{
+                    required: {
+                      value: true,
+                      message: 'Campo obligatório!',
+                    },
+                  }}
                   control={control}
                   render={({
-                    field: { onChange, onBlur, value = '', name },
+                    field: { onChange, onBlur, value = '', name, ref },
                   }) => (
                     <Input
-                      {...register(name, {
-                        required: {
-                          value: true,
-                          message: 'Campo obligatório!',
-                        },
-                      })}
+                      {...register(name)}
+                      ref={ref}
                       name={name}
                       id={name}
                       type={
@@ -83,23 +104,42 @@ const SignUpForm = () => {
                 />
 
                 <FormErrorMessage>
-                  {errors[name] && errors[name].message}
+                  {formState.errors[name] && formState.errors[name].message}
                 </FormErrorMessage>
               </FormControl>
             );
           })}
           <Text>
-            No tenés cuenta?{' '}
+            {isLogin ? 'No tenés cuenta? ' : 'Ya estás registrado? '}
+
             <button
               type="button"
               onClick={() => setisLogin(!isLogin)}
               style={{ fontWeight: 'bold', color: 'blue' }}>
-              Registrese
+              {isLogin ? 'Registrese' : 'Ingrese Aqui'}
             </button>
           </Text>
         </VStack>
         <DrawerFooter>
-          <Button type="submit" rightIcon={isSubmitting && <Spinner />}>
+          <Button
+            type="submit"
+            colorScheme={
+              isSuccessRequest
+                ? 'green'
+                : isSuccessRequest === false
+                ? 'red'
+                : 'gray'
+            }
+            rightIcon={
+              formState.isSubmitting ? (
+                <Spinner />
+              ) : formState.isSubmitSuccessful && isSuccessRequest ? (
+                <BsCheck />
+              ) : formState.isSubmitSuccessful && !isSuccessRequest ? (
+                <RxCross2 />
+              ) : null
+            }
+            isDisabled={formState.isSubmitting}>
             Submit
           </Button>
         </DrawerFooter>
