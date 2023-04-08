@@ -7,3 +7,13 @@ export const getMenuNamesData = async () => {
     .catch((err) => console.log(err));
   return menuNames;
 };
+
+export const getProducts = async () => {
+  const products = fetch('./data/products.json')
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => data)
+    .catch((err) => console.log(err));
+  return products;
+};

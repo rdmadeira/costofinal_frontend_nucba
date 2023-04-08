@@ -9,15 +9,16 @@ import {
   Button,
   Text,
   VStack,
+  Box,
 } from '@chakra-ui/react';
 import { Controller, useForm } from 'react-hook-form';
 import Input from './Input';
 import { BsCheck } from 'react-icons/bs';
 import { RxCross2 } from 'react-icons/rx';
-import { createUser } from '../../firebase/firebaseConfig';
+import { createUser, loginUserHandle } from '../../firebase/auth';
 
-const SignUpForm = () => {
-  const { register, handleSubmit, control, formState } = useForm({
+const SignUpForm = ({ onClose }) => {
+  const { register, handleSubmit, control, formState, getValues } = useForm({
     mode: 'onSubmit',
     reValidateMode: 'onChange',
   });
@@ -44,7 +45,7 @@ const SignUpForm = () => {
         } else {
           setisSuccessRequest(false);
           toast({
-            title: 'Email ya registrado',
+            title: 'Error:',
             description: res.message,
             status: 'error',
             isClosable: true,
@@ -52,34 +53,90 @@ const SignUpForm = () => {
         }
       });
     }
+    return loginUserHandle(data).then((res) => {
+      if (res.isSuccesful) {
+        setisSuccessRequest(true);
+        toast({
+          title: 'Login:',
+          description: res.message,
+          status: 'success',
+          isClosable: true,
+        });
+        setTimeout(() => onClose(), 1000);
+      } else {
+        setisSuccessRequest(false);
+        toast({
+          title: 'Login:',
+          description: res.message,
+          status: 'error',
+          isClosable: true,
+        });
+      }
+    });
   };
 
   const inputNames = isLogin
-    ? ['email', 'password']
-    : ['email', 'password', 'name', 'lastname', 'address', 'phone'];
+    ? ['email', 'contraseña']
+    : [
+        'nombre',
+        'apellido',
+        'calle',
+        'numero',
+        'localidad',
+        'CP',
+        'telefono',
+        'email',
+        'contraseña',
+        'confirme la contraseña',
+      ];
 
   return (
-    <div>
+    <Box>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <VStack spacing={'4'}>
+        <VStack
+          spacing={'4'}
+          display="flex"
+          flexDirection="row"
+          wrap="wrap"
+          columnGap="10px">
           {inputNames.map((name) => {
             return (
               <FormControl
                 isInvalid={formState.errors[name]}
-                width="75%"
+                width={
+                  name === 'numero' || name === 'CP'
+                    ? '20%'
+                    : name === 'localidad' || name === 'telefono'
+                    ? 'calc(100% - 10px - 20%)'
+                    : '100%'
+                }
                 isRequired
-                key={name}>
+                key={name}
+                display="inline-block">
                 <FormLabel htmlFor={name}>
                   {name[0].toLocaleUpperCase() + name.slice(1)}
                 </FormLabel>
                 <Controller
                   name={name}
-                  rules={{
-                    required: {
-                      value: true,
-                      message: 'Campo obligatório!',
-                    },
-                  }}
+                  rules={
+                    name === 'confirme la contraseña'
+                      ? {
+                          required: {
+                            value: true,
+                            message: 'Campo obligatório!',
+                          },
+                          validate: (value) => {
+                            if (value === getValues('contraseña')) return true;
+                            return 'Confirmación de contraseña no coincide';
+                          },
+                        }
+                      : {
+                          required: {
+                            value: true,
+                            message: 'Campo obligatório!',
+                          },
+                        }
+                  }
                   control={control}
                   render={({
                     field: { onChange, onBlur, value = '', name, ref },
@@ -90,13 +147,17 @@ const SignUpForm = () => {
                       name={name}
                       id={name}
                       type={
-                        name === 'password'
+                        name === 'contraseña' ||
+                        name === 'confirme la contraseña'
                           ? 'password'
                           : name === 'teléfono'
                           ? 'tel'
                           : 'text'
                       }
-                      onChange={onChange}
+                      onChange={(value) => {
+                        setisSuccessRequest(null);
+                        onChange(value);
+                      }}
                       onBlur={onBlur}
                       value={value}
                     />
@@ -135,7 +196,7 @@ const SignUpForm = () => {
                 <Spinner />
               ) : formState.isSubmitSuccessful && isSuccessRequest ? (
                 <BsCheck />
-              ) : formState.isSubmitSuccessful && !isSuccessRequest ? (
+              ) : formState.isSubmitSuccessful && isSuccessRequest === false ? (
                 <RxCross2 />
               ) : null
             }
@@ -144,7 +205,7 @@ const SignUpForm = () => {
           </Button>
         </DrawerFooter>
       </form>
-    </div>
+    </Box>
   );
 };
 

@@ -3,7 +3,6 @@ import { getMenuNamesData } from '../../utils/data_utils/dataUtils.js';
 import { CustomIconButton } from './sideBarComponents.js';
 import {
   IconButton,
-  Avatar,
   Box,
   CloseButton,
   Flex,
@@ -24,28 +23,17 @@ import {
   Button,
   Hide,
 } from '@chakra-ui/react';
-import {
-  /* FiHome,
-  FiTrendingUp,
-  FiCompass,
-  FiStar,
-  FiSettings, */
-  FiMenu,
-  FiChevronDown,
-} from 'react-icons/fi';
+import { FiMenu, FiChevronDown } from 'react-icons/fi';
 import { TfiLayoutGrid3Alt, TfiLayoutGrid2 } from 'react-icons/tfi';
 import { BsCart4 } from 'react-icons/bs';
 import { RiAccountPinCircleFill } from 'react-icons/ri';
+import { ImUserTie } from 'react-icons/im';
 import Logo from '../ui/Logo.jsx';
 import Main from '../../pages/Main';
+import { useSelector } from 'react-redux';
+import { signOut } from '../../firebase/auth';
 
-/* const LinkItems = [
-  { name: 'Home', icon: FiHome },
-  { name: 'Trending', icon: FiTrendingUp },
-  { name: 'Explore', icon: FiCompass },
-  { name: 'Favourites', icon: FiStar },
-  { name: 'Settings', icon: FiSettings },
-]; */
+/* ****************************************************************************************** */
 
 export default function SidebarWithHeader() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -54,6 +42,8 @@ export default function SidebarWithHeader() {
     onOpen: onOpenLogin,
     onClose: onCloseLogin,
   } = useDisclosure();
+  const user = useSelector((store) => store.user);
+
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
       <SidebarContent
@@ -73,8 +63,8 @@ export default function SidebarWithHeader() {
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
-      <MobileNav onOpen={onOpen} onOpenLogin={onOpenLogin} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
+      <MobileNav onOpen={onOpen} onOpenLogin={onOpenLogin} user={user} />
+      <Box ml={{ base: 0, md: 52 }} p="4">
         <Main isOpen={isOpenLogin} onClose={onCloseLogin} />
       </Box>
     </Box>
@@ -190,7 +180,7 @@ const MobileNav = ({ onOpen, onOpenLogin, user, ...rest }) => {
 
       <Logo width="8%" display={{ base: 'flex', md: 'none' }} />
 
-      <HStack spacing={{ base: '0', md: '6' }}>
+      <HStack spacing={{ base: '3', md: '6' }}>
         {user && (
           <CustomIconButton
             size="lg"
@@ -202,35 +192,51 @@ const MobileNav = ({ onOpen, onOpenLogin, user, ...rest }) => {
         <Flex alignItems={'center'}>
           <Menu>
             {user ? (
-              <MenuButton
-                paddingRight={{ base: '0', md: '5' }}
-                color="gray.500"
-                transition="all 0.3s"
-                borderBottom="transparent 1px solid"
-                _focus={{ boxShadow: 'none' }}
-                _hover={{ borderBottom: 'gray 1px solid' }}>
-                <HStack>
-                  <Avatar
-                    size={'sm'}
-                    src={
-                      'https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
-                    }
-                  />
+              <>
+                <MenuButton
+                  paddingRight={{ base: '0', md: '5' }}
+                  color="gray.500"
+                  transition="all 0.3s"
+                  borderBottom="transparent 1px solid"
+                  _focus={{ boxShadow: 'none' }}
+                  _hover={{ borderBottom: 'gray 1px solid' }}>
+                  <HStack>
+                    <ImUserTie size="25px" />
+                    <VStack
+                      display={{ base: 'none', md: 'flex' }}
+                      alignItems="flex-start"
+                      spacing="1px"
+                      ml="2">
+                      <Text fontSize="sm">{user?.displayName}</Text>
+                      <Text fontSize="xs" color="gray.600">
+                        Admin
+                      </Text>
+                    </VStack>
+                    <Box display={{ base: 'none', md: 'flex' }}>
+                      <FiChevronDown />
+                    </Box>
+                  </HStack>
+                </MenuButton>
+                <MenuList
+                  bg={useColorModeValue('white', 'gray.900')}
+                  borderColor={useColorModeValue('gray.200', 'gray.700')}>
                   <VStack
-                    display={{ base: 'none', md: 'flex' }}
+                    display={{ base: 'flex', md: 'none' }}
                     alignItems="flex-start"
                     spacing="1px"
                     ml="2">
-                    <Text fontSize="sm">{'User name'}</Text>
+                    <Text fontSize="sm">{user.displayName}</Text>
                     <Text fontSize="xs" color="gray.600">
                       Admin
                     </Text>
                   </VStack>
-                  <Box display={{ base: 'none', md: 'flex' }}>
-                    <FiChevronDown />
-                  </Box>
-                </HStack>
-              </MenuButton>
+                  <MenuDivider />
+                  <MenuItem>Mis Datos</MenuItem>
+                  <MenuItem>Mis Ordenes</MenuItem>
+                  <MenuDivider />
+                  <MenuItem onClick={signOut}>Cerrar sesión</MenuItem>
+                </MenuList>
+              </>
             ) : (
               <Button
                 onClick={onOpenLogin}
@@ -240,14 +246,6 @@ const MobileNav = ({ onOpen, onOpenLogin, user, ...rest }) => {
                 {<Hide below="md">Ingresar</Hide>}
               </Button>
             )}
-            <MenuList
-              bg={useColorModeValue('white', 'gray.900')}
-              borderColor={useColorModeValue('gray.200', 'gray.700')}>
-              <MenuItem>Mis Datos</MenuItem>
-              <MenuItem>Mis Ordenes</MenuItem>
-              <MenuDivider />
-              <MenuItem>Cerrar sesión</MenuItem>
-            </MenuList>
           </Menu>
         </Flex>
       </HStack>
