@@ -3,11 +3,7 @@ import { useDispatch } from 'react-redux';
 import { ChakraProvider } from '@chakra-ui/react';
 import { auth, getUserFromDB } from './firebase/auth';
 import { onAuthStateChanged } from 'firebase/auth';
-/* import Header from './components/header/Header.jsx';
-import Sidebar from './components/sidebar/Sidebar.jsx'; */
-
 import * as userActions from './redux/user/userActions';
-
 import SidebarWithHeader from './components/sidebar_with_header/Sidebar_Header.js';
 
 function App() {
@@ -33,8 +29,6 @@ function App() {
 
   return (
     <ChakraProvider breakpoints={['xl', ' lg', 'md', 'sm', 'xs']}>
-      {/* <Header />
-      <Sidebar /> */}
       <SidebarWithHeader />
     </ChakraProvider>
   );

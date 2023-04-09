@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, createContext } from 'react';
+import { useSelector } from 'react-redux';
 import { getMenuNamesData } from '../../utils/data_utils/dataUtils.js';
 import { CustomIconButton } from './sideBarComponents.js';
 import {
@@ -30,10 +31,12 @@ import { RiAccountPinCircleFill } from 'react-icons/ri';
 import { ImUserTie } from 'react-icons/im';
 import Logo from '../ui/Logo.jsx';
 import Main from '../../pages/Main';
-import { useSelector } from 'react-redux';
 import { signOut } from '../../firebase/auth';
+import { NavLink } from 'react-router-dom';
 
 /* ****************************************************************************************** */
+
+export const OpenLoginContext = createContext(null);
 
 export default function SidebarWithHeader() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -42,37 +45,41 @@ export default function SidebarWithHeader() {
     onOpen: onOpenLogin,
     onClose: onCloseLogin,
   } = useDisclosure();
+
   const user = useSelector((store) => store.user);
 
   return (
-    <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
-      <SidebarContent
-        onClose={() => onClose}
-        display={{ base: 'none', md: 'block' }}
-      />
-      <Drawer
-        /* autoFocus={false} */
-        isOpen={isOpen}
-        placement="left"
-        onClose={onClose}
-        returnFocusOnClose={false}
-        onOverlayClick={onClose}
-        size="full">
-        <DrawerContent>
-          <SidebarContent onClose={onClose} />
-        </DrawerContent>
-      </Drawer>
-      {/* mobilenav */}
-      <MobileNav onOpen={onOpen} onOpenLogin={onOpenLogin} user={user} />
-      <Box ml={{ base: 0, md: 52 }} p="4">
-        <Main isOpen={isOpenLogin} onClose={onCloseLogin} />
+    <OpenLoginContext.Provider value={onOpenLogin}>
+      <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
+        <SidebarContent
+          onClose={() => onClose}
+          display={{ base: 'none', md: 'block' }}
+        />
+        <Drawer
+          /* autoFocus={false} */
+          isOpen={isOpen}
+          placement="left"
+          onClose={onClose}
+          returnFocusOnClose={false}
+          onOverlayClick={onClose}
+          size="full">
+          <DrawerContent>
+            <SidebarContent onClose={onClose} />
+          </DrawerContent>
+        </Drawer>
+
+        <MobileNav onOpen={onOpen} onOpenLogin={onOpenLogin} user={user} />
+        <Box ml={{ base: 0, md: 52 }} p="4">
+          <Main isOpen={isOpenLogin} onClose={onCloseLogin} />
+        </Box>
       </Box>
-    </Box>
+    </OpenLoginContext.Provider>
   );
 }
 
 const SidebarContent = ({ onClose, ...rest }) => {
   const [menuItems, setmenuItems] = useState(null);
+
   const icons = [
     TfiLayoutGrid2,
     TfiLayoutGrid3Alt,
@@ -112,13 +119,11 @@ const SidebarContent = ({ onClose, ...rest }) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {menuItems?.map((link) => (
-        <NavItem
-          key={link.name}
-          icon={link.icon}
-          fontSize="xs"
-          color="gray.500">
-          {link.name}
-        </NavItem>
+        <NavLink to={`products/${link.path}`} key={link.name}>
+          <NavItem icon={link.icon} fontSize="xs" color="gray.500">
+            {link.name}
+          </NavItem>
+        </NavLink>
       ))}
     </Box>
   );
@@ -126,10 +131,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
 
 const NavItem = ({ icon, children, ...rest }) => {
   return (
-    <Link
-      href="#"
-      style={{ textDecoration: 'none' }}
-      _focus={{ boxShadow: 'none' }}>
+    <Box style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
       <Flex
         align="center"
         p="4"
@@ -154,11 +156,13 @@ const NavItem = ({ icon, children, ...rest }) => {
         )}
         {children}
       </Flex>
-    </Link>
+    </Box>
   );
 };
 
 const MobileNav = ({ onOpen, onOpenLogin, user, ...rest }) => {
+  const cart = useSelector((store) => store.cart);
+  console.log(typeof cart.length);
   return (
     <Flex
       ml={{ base: 0, md: 52 }}
@@ -182,12 +186,15 @@ const MobileNav = ({ onOpen, onOpenLogin, user, ...rest }) => {
 
       <HStack spacing={{ base: '3', md: '6' }}>
         {user && (
-          <CustomIconButton
-            size="lg"
-            variant="ghost"
-            aria-label="open menu"
-            icon={<BsCart4 />}
-          />
+          <NavLink to="/cart">
+            <CustomIconButton
+              cartNum={cart && cart.length}
+              size="lg"
+              variant="ghost"
+              aria-label="open menu"
+              icon={<BsCart4 />}
+            />
+          </NavLink>
         )}
         <Flex alignItems={'center'}>
           <Menu>

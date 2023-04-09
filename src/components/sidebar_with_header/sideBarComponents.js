@@ -16,7 +16,7 @@ const CartNumberSpan = styled.span`
 export const CustomIconButton = ({ cartNum, ...rest }) => {
   return (
     <Box pos="relative">
-      <CartNumberSpan>{cartNum || 1}</CartNumberSpan>
+      <CartNumberSpan>{cartNum}</CartNumberSpan>
       <IconButton {...rest} />
     </Box>
   );

@@ -7,7 +7,7 @@ import {
   DrawerHeader,
   DrawerBody,
 } from '@chakra-ui/react';
-import Products from './Products';
+import { Outlet } from 'react-router-dom';
 import SignUpForm from '../components/forms/SignUpForm';
 
 const Main = ({ isOpen, onClose }) => {
@@ -27,7 +27,8 @@ const Main = ({ isOpen, onClose }) => {
           </DrawerBody>
         </DrawerContent>
       </Drawer>
-      <Products />
+
+      <Outlet />
     </>
   );
 };

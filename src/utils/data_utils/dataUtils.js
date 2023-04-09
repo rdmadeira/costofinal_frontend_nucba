@@ -1,15 +1,22 @@
 export const getMenuNamesData = async () => {
-  const menuNames = fetch('./data/menuProducts.json')
+  const menuNames = await fetch(
+    process.env.PUBLIC_URL + '/data/menuProducts.json'
+  )
     .then((response) => {
       return response.json();
     })
-    .then((data) => Object.keys(data).map((key) => ({ name: key })))
+    .then((data) =>
+      Object.keys(data).map((key) => ({
+        name: key,
+        path: key.replace(/\s+/g, '-').toLowerCase(),
+      }))
+    )
     .catch((err) => console.log(err));
   return menuNames;
 };
 
 export const getProducts = async () => {
-  const products = fetch('./data/products.json')
+  const products = fetch(process.env.PUBLIC_URL + '/data/products.json')
     .then((response) => {
       return response.json();
     })
