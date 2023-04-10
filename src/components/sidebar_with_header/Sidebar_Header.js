@@ -1,5 +1,6 @@
 import React, { useEffect, useState, createContext } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { getMenuNamesData } from '../../utils/data_utils/dataUtils.js';
 import { CustomIconButton } from './sideBarComponents.js';
 import {
@@ -162,7 +163,11 @@ const NavItem = ({ icon, children, ...rest }) => {
 
 const MobileNav = ({ onOpen, onOpenLogin, user, ...rest }) => {
   const cart = useSelector((store) => store.cart);
-  console.log(typeof cart.length);
+  const navigate = useNavigate();
+  const navigateHandle = () => {
+    navigate('/orders');
+  };
+
   return (
     <Flex
       ml={{ base: 0, md: 52 }}
@@ -239,7 +244,7 @@ const MobileNav = ({ onOpen, onOpenLogin, user, ...rest }) => {
                   </VStack>
                   <MenuDivider />
                   <MenuItem>Mis Datos</MenuItem>
-                  <MenuItem>Mis Ordenes</MenuItem>
+                  <MenuItem onClick={navigateHandle}>Mis Ordenes</MenuItem>
                   <MenuDivider />
                   <MenuItem onClick={signOut}>Cerrar sesión</MenuItem>
                 </MenuList>

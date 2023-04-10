@@ -8,6 +8,7 @@ import Products from './pages/Products';
 import Cart from './pages/Cart';
 import { persistor, store } from './redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
+import Orders from './pages/Orders';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: 'cart',
         element: <Cart />,
+      },
+      {
+        path: 'orders',
+        element: <Orders />,
       },
     ],
   },

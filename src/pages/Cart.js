@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 import {
   Table,
   Thead,
@@ -13,19 +13,77 @@ import {
   VStack,
   Button,
   Divider,
+  Spinner,
 } from '@chakra-ui/react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { formatPrices } from '../utils/product_utils/product_utils';
+import { createOrder } from '../utils/orders_utils/orderUtils';
+import { createOrderToDatabase } from '../firebase/firestore';
+import { resetCartAction } from '../redux/cart/cartActions';
+import { CheckIcon, WarningTwoIcon } from '@chakra-ui/icons';
+import { useNavigate } from 'react-router-dom';
+
+const initialState = {
+  isLoading: false,
+  isSuccessful: false,
+  isError: false,
+};
+
+const cartReducer = (state, action) => {
+  switch (action.type) {
+    case 'loading':
+      return {
+        isSuccessful: false,
+        isError: false,
+        isLoading: true,
+      };
+    case 'success':
+      return {
+        isSuccessful: true,
+        isLoading: false,
+        isError: false,
+      };
+    case 'error':
+      return {
+        isSuccess: false,
+        isLoading: false,
+        isError: true,
+      };
+    case 'reset':
+      return initialState;
+    default:
+      return state;
+  }
+};
 
 const Cart = () => {
   const cart = useSelector((store) => store.cart);
+  const user = useSelector((store) => store.user);
+  const dispatch = useDispatch();
+  const [estado, redDispatch] = useReducer(cartReducer, initialState);
+  const navigate = useNavigate();
+
+  const createOrderHandle = () => {
+    const newOrder = createOrder(user.uid, cart);
+    redDispatch({ type: 'loading' });
+    createOrderToDatabase(user.uid, newOrder).then((res) => {
+      if (res.isSuccess) {
+        redDispatch({ type: 'success' });
+        setTimeout(() => {
+          dispatch(resetCartAction());
+          redDispatch({ type: 'reset' });
+          navigate('/orders');
+        }, 2000);
+      }
+    });
+  };
   return (
     <VStack>
       <Heading as="h6" size="sm">
         Mi Carrito
       </Heading>
       <TableContainer whiteSpace="pre-wrap">
-        <Table>
+        <Table variant="simple">
           <TableCaption>Este carrito será agregado a sus pedidos.</TableCaption>
           <Thead>
             <Tr>
@@ -35,8 +93,8 @@ const Cart = () => {
               <Th textAlign="center">CANTIDAD</Th>
               <Th textAlign="center">SUBTOTAL</Th>
             </Tr>
-            <Divider size="lg" orientation="horizontal" colorScheme={'blue'} />
           </Thead>
+
           <Tbody>
             {cart &&
               cart.map((cartItem) => {
@@ -53,10 +111,28 @@ const Cart = () => {
                 );
               })}
           </Tbody>
-          <Tfoot>
-            <Button>Enviar pedido</Button>
-          </Tfoot>
+          <Tfoot></Tfoot>
         </Table>
+        <Divider size="lg" orientation="horizontal" colorScheme={'blue'} />
+        {cart.length > 0 && (
+          <Button
+            isDisabled={estado.isLoading || cart.length === 0}
+            rightIcon={
+              estado.isLoading ? (
+                <Spinner />
+              ) : estado.isSuccessful ? (
+                <CheckIcon />
+              ) : estado.isError ? (
+                <WarningTwoIcon />
+              ) : null
+            }
+            variant={estado.isSuccessful ? 'solid' : 'outline'}
+            colorScheme="green"
+            float="right"
+            onClick={createOrderHandle}>
+            Enviar pedido
+          </Button>
+        )}
       </TableContainer>
     </VStack>
   );
