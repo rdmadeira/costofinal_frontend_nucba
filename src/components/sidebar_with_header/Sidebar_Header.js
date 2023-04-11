@@ -15,7 +15,6 @@ import {
   VStack,
   Icon,
   useColorModeValue,
-  Link,
   Drawer,
   DrawerContent,
   Text,
@@ -145,13 +144,13 @@ const SidebarContent = ({ onClose, ...rest }) => {
         mx="8"
         justifyContent="space-between"
         marginBlockEnd="10px">
-        <Link href="/home" display="flex" justifyContent="center" m="20px 0">
+        <NavLink href="/">
           <Logo width={{ base: '20%', md: '40%' }} />
-        </Link>
+        </NavLink>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {menuItems?.map((link) => (
-        <NavLink to={`products/${link.path}`} key={link.name}>
+        <NavLink to={`products/${link.path}`} key={link.name} onClick={onClose}>
           <NavItem icon={link.icon} fontSize="xs" color="gray.500">
             {link.name}
           </NavItem>
@@ -233,7 +232,12 @@ const MobileNav = ({
         icon={<FiMenu />}
       />
 
-      <Logo width="8%" display={{ base: 'flex', md: 'none' }} />
+      <Logo
+        width="8%"
+        display={{ base: 'flex', md: 'none' }}
+        position="absolute"
+        left="calc(50vw - 4%)"
+      />
 
       <HStack spacing={{ base: '3', md: '6' }}>
         {user && (

@@ -30,11 +30,18 @@ export const createOrderToDatabase = async (userId, newOrder) => {
 
 export const getOrders = async (userId) => {
   const userOrderRef = collection(db, 'orders', userId, userId);
+  let orders = { isError: null, items: [] };
 
-  const orders = await getDocs(userOrderRef).then((querySnapshot) => {
-    const docs = querySnapshot.docs.map((query) => query.data());
-    return docs;
-  });
+  await getDocs(userOrderRef)
+    .then((querySnapshot) => {
+      const docs = querySnapshot.docs.map((query) => query.data());
+      orders = { isError: false, items: docs };
+      return;
+    })
+    .catch((err) => {
+      orders = { isError: true, items: [], message: err.code };
+      return;
+    });
 
   return orders;
 };

@@ -73,12 +73,12 @@ const Cart = () => {
           dispatch(resetCartAction());
           redDispatch({ type: 'reset' });
           navigate('/orders');
-        }, 2000);
+        }, 1200);
       }
     });
   };
   return (
-    <VStack>
+    <VStack spacing="5">
       <Heading as="h6" size="sm" color="gray.500">
         Mi Carrito
       </Heading>
@@ -99,7 +99,7 @@ const Cart = () => {
             </Tr>
           </Thead>
 
-          <Tbody>
+          <Tbody borderBottom="solid 2px" borderColor="gray.300">
             {cart &&
               cart.map((cartItem) => {
                 return (
@@ -115,7 +115,24 @@ const Cart = () => {
                 );
               })}
           </Tbody>
-          <Tfoot></Tfoot>
+          <Tfoot>
+            {
+              <Tr>
+                <Th></Th>
+                <Th></Th>
+                <Th></Th>
+                <Th>Total del carrito: </Th>
+                <Th>
+                  {formatPrices(
+                    cart.reduce(
+                      (acc, curr) => acc + curr.PRECIO * curr.quantity,
+                      0
+                    )
+                  )}
+                </Th>
+              </Tr>
+            }
+          </Tfoot>
         </Table>
         <Divider size="lg" orientation="horizontal" colorScheme={'blue'} />
         {cart.length > 0 && (
@@ -133,7 +150,8 @@ const Cart = () => {
             variant={estado.isSuccessful ? 'solid' : 'outline'}
             colorScheme="green"
             float="right"
-            onClick={createOrderHandle}>
+            onClick={createOrderHandle}
+            mt={4}>
             Enviar pedido
           </Button>
         )}

@@ -18,7 +18,7 @@ function App() {
           user = userData;
           dispatch(userActions.setUser(user));
           getOrders(currentUser.uid).then((res) => {
-            dispatch(getOrdersAction(res));
+            dispatch(getOrdersAction(res.items));
           });
         });
       } else {
