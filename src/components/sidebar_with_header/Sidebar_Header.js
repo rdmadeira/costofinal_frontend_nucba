@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { getMenuNamesData } from '../../utils/data_utils/dataUtils.js';
 import { CustomIconButton } from './sideBarComponents.js';
 import {
+  Modal,
+  ModalBody,
+  ModalContent,
   IconButton,
   Box,
   CloseButton,
@@ -24,6 +27,10 @@ import {
   MenuList,
   Button,
   Hide,
+  ModalOverlay,
+  Spinner,
+  ModalHeader,
+  ModalFooter,
 } from '@chakra-ui/react';
 import { FiMenu, FiChevronDown } from 'react-icons/fi';
 import { TfiLayoutGrid3Alt, TfiLayoutGrid2 } from 'react-icons/tfi';
@@ -45,6 +52,11 @@ export default function SidebarWithHeader() {
     isOpen: isOpenLogin,
     onOpen: onOpenLogin,
     onClose: onCloseLogin,
+  } = useDisclosure();
+  const {
+    isOpen: signoutIsOpen,
+    onOpen: signoutOnOpen,
+    onClose: signoutOnClose,
   } = useDisclosure();
 
   const user = useSelector((store) => store.user);
@@ -69,7 +81,26 @@ export default function SidebarWithHeader() {
           </DrawerContent>
         </Drawer>
 
-        <MobileNav onOpen={onOpen} onOpenLogin={onOpenLogin} user={user} />
+        <Modal isOpen={signoutIsOpen}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Saliendo...</ModalHeader>
+            <ModalBody>
+              <Box padding="5">
+                <Spinner />
+              </Box>
+            </ModalBody>
+            <ModalFooter></ModalFooter>
+          </ModalContent>
+        </Modal>
+
+        <MobileNav
+          onOpen={onOpen}
+          onOpenLogin={onOpenLogin}
+          signoutOnOpen={signoutOnOpen}
+          signoutOnClose={signoutOnClose}
+          user={user}
+        />
         <Box ml={{ base: 0, md: 52 }} p="4">
           <Main isOpen={isOpenLogin} onClose={onCloseLogin} />
         </Box>
@@ -161,11 +192,26 @@ const NavItem = ({ icon, children, ...rest }) => {
   );
 };
 
-const MobileNav = ({ onOpen, onOpenLogin, user, ...rest }) => {
+const MobileNav = ({
+  onOpen,
+  onOpenLogin,
+  signoutOnOpen,
+  signoutOnClose,
+  user,
+  ...rest
+}) => {
   const cart = useSelector((store) => store.cart);
   const navigate = useNavigate();
+
   const navigateHandle = () => {
     navigate('/orders');
+  };
+  const signOutHandle = () => {
+    signoutOnOpen();
+    signOut().then(() => {
+      signoutOnClose();
+      navigate('/');
+    });
   };
 
   return (
@@ -246,7 +292,7 @@ const MobileNav = ({ onOpen, onOpenLogin, user, ...rest }) => {
                   <MenuItem>Mis Datos</MenuItem>
                   <MenuItem onClick={navigateHandle}>Mis Ordenes</MenuItem>
                   <MenuDivider />
-                  <MenuItem onClick={signOut}>Cerrar sesión</MenuItem>
+                  <MenuItem onClick={signOutHandle}>Cerrar sesión</MenuItem>
                 </MenuList>
               </>
             ) : (

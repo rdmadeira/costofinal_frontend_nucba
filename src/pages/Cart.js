@@ -79,12 +79,16 @@ const Cart = () => {
   };
   return (
     <VStack>
-      <Heading as="h6" size="sm">
+      <Heading as="h6" size="sm" color="gray.500">
         Mi Carrito
       </Heading>
       <TableContainer whiteSpace="pre-wrap">
-        <Table variant="simple">
-          <TableCaption>Este carrito será agregado a sus pedidos.</TableCaption>
+        <Table variant="simple" size="sm">
+          <TableCaption>
+            {cart.length > 0
+              ? 'Este carrito será agregado a sus pedidos.'
+              : 'No hay productos en el carrito'}
+          </TableCaption>
           <Thead>
             <Tr>
               <Th textAlign="center">CODIGO</Th>

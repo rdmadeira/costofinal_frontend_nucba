@@ -1,6 +1,6 @@
-export const ADD_ORDER_TO_ORDERS = 'ADD_ORDER_TO_ORDERS';
+export const GET_ORDERS = 'GET_ORDERS';
 
 export const getOrdersAction = (order) => ({
-  type: ADD_ORDER_TO_ORDERS,
+  type: GET_ORDERS,
   payload: order,
 });

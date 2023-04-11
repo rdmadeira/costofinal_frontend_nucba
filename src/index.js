@@ -9,12 +9,14 @@ import Cart from './pages/Cart';
 import { persistor, store } from './redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import Orders from './pages/Orders';
+import Home from './pages/Home';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
     children: [
+      { path: '/', element: <Home />, index: true },
       {
         path: 'products/:product',
         element: <Products />,

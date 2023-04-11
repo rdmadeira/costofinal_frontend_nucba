@@ -7,6 +7,7 @@ export const createOrder = (userId, cart) => {
     items: cart,
     createdAt,
     id: uuidv4(),
+    status: 'pending',
   };
   return newOrder;
 };
