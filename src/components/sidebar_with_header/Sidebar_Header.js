@@ -202,8 +202,8 @@ const MobileNav = ({
   const cart = useSelector((store) => store.cart);
   const navigate = useNavigate();
 
-  const navigateHandle = () => {
-    navigate('/orders');
+  const navigateHandle = (path) => {
+    navigate(path);
   };
   const signOutHandle = () => {
     signoutOnOpen();
@@ -293,8 +293,12 @@ const MobileNav = ({
                     </Text>
                   </VStack>
                   <MenuDivider />
-                  <MenuItem>Mis Datos</MenuItem>
-                  <MenuItem onClick={navigateHandle}>Mis Ordenes</MenuItem>
+                  <MenuItem onClick={() => navigateHandle('/account')}>
+                    Mis Datos
+                  </MenuItem>
+                  <MenuItem onClick={() => navigateHandle('/orders')}>
+                    Mis Ordenes
+                  </MenuItem>
                   <MenuDivider />
                   <MenuItem onClick={signOutHandle}>Cerrar sesión</MenuItem>
                 </MenuList>
