@@ -29,17 +29,17 @@ export const createUser = async (user) => {
 
       const newUser = {
         uid,
-        name: user.nombre,
-        lastname: user.apellido,
+        nombre: user.nombre,
+        apellido: user.apellido,
         createdAt,
         displayName,
         email,
         phone: user.telefono,
-        address: {
-          street: user.calle,
-          num: user.numero,
-          location: user.localidad,
-          code: user['CP'],
+        dirección: {
+          calle: user.calle,
+          numero: user.numero,
+          localidad: user.localidad,
+          CP: user['CP'],
         },
       };
 

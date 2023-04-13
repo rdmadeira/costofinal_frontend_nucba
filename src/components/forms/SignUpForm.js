@@ -16,6 +16,7 @@ import Input from './Input';
 import { BsCheck } from 'react-icons/bs';
 import { RxCross2 } from 'react-icons/rx';
 import { createUser, loginUserHandle } from '../../firebase/auth';
+import { inputsArray } from '../../utils/inputsArray';
 
 const SignUpForm = ({ onClose, loginState: { isLogin, setisLogin } }) => {
   const { register, handleSubmit, control, formState, getValues } = useForm({
@@ -76,20 +77,7 @@ const SignUpForm = ({ onClose, loginState: { isLogin, setisLogin } }) => {
     });
   };
 
-  const inputNames = isLogin
-    ? ['email', 'contraseña']
-    : [
-        'nombre',
-        'apellido',
-        'calle',
-        'numero',
-        'localidad',
-        'CP',
-        'telefono',
-        'email',
-        'contraseña',
-        'confirme la contraseña',
-      ];
+  const inputNames = isLogin ? ['email', 'contraseña'] : inputsArray;
 
   return (
     <Box>

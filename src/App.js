@@ -16,6 +16,7 @@ function App() {
       if (currentUser) {
         getUserFromDB(currentUser.uid).then((userData) => {
           user = userData;
+
           dispatch(userActions.setUser(user));
           getOrders(currentUser.uid).then((res) => {
             dispatch(getOrdersAction(res.items));
