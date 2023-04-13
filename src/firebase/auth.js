@@ -29,6 +29,8 @@ export const createUser = async (user) => {
 
       const newUser = {
         uid,
+        name: user.nombre,
+        lastname: user.apellido,
         createdAt,
         displayName,
         email,
@@ -41,6 +43,7 @@ export const createUser = async (user) => {
         },
       };
 
+      console.log(newUser);
       setDoc(doc(db, 'users', newUser.uid), newUser);
 
       response.isSuccesful = true;

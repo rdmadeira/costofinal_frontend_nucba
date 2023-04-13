@@ -17,13 +17,12 @@ import { BsCheck } from 'react-icons/bs';
 import { RxCross2 } from 'react-icons/rx';
 import { createUser, loginUserHandle } from '../../firebase/auth';
 
-const SignUpForm = ({ onClose }) => {
+const SignUpForm = ({ onClose, loginState: { isLogin, setisLogin } }) => {
   const { register, handleSubmit, control, formState, getValues } = useForm({
     mode: 'onSubmit',
     reValidateMode: 'onChange',
   });
 
-  const [isLogin, setisLogin] = useState(true);
   const [isSuccessRequest, setisSuccessRequest] = useState(null);
   const toast = useToast();
 
@@ -32,6 +31,7 @@ const SignUpForm = ({ onClose }) => {
   }, [formState]); */
 
   const onSubmit = (data) => {
+    console.log(data);
     if (!isLogin) {
       return createUser(data).then((res) => {
         if (res.isSuccesful) {
@@ -42,6 +42,7 @@ const SignUpForm = ({ onClose }) => {
             status: 'success',
             isClosable: true,
           });
+          setTimeout(() => onClose(), 1000);
         } else {
           setisSuccessRequest(false);
           toast({

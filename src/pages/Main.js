@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   DrawerContent,
   Drawer,
@@ -11,6 +11,7 @@ import { Outlet } from 'react-router-dom';
 import SignUpForm from '../components/forms/SignUpForm';
 
 const Main = ({ isOpen, onClose }) => {
+  const [isLogin, setisLogin] = useState(true);
   return (
     <>
       <Drawer
@@ -21,9 +22,14 @@ const Main = ({ isOpen, onClose }) => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton onClick={onClose} />
-          <DrawerHeader>INGRESE A SU CUENTA</DrawerHeader>
+          <DrawerHeader>
+            {isLogin ? 'INGRESE A SU CUENTA' : 'REGISTRESE'}
+          </DrawerHeader>
           <DrawerBody>
-            <SignUpForm onClose={onClose} />
+            <SignUpForm
+              onClose={onClose}
+              loginState={{ isLogin, setisLogin }}
+            />
           </DrawerBody>
         </DrawerContent>
       </Drawer>
