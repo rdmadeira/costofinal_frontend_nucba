@@ -100,7 +100,7 @@ export default function SidebarWithHeader() {
           signoutOnClose={signoutOnClose}
           user={user}
         />
-        <Box ml={{ base: 0, md: 52 }} p="4">
+        <Box ml={{ base: 0, md: 52 }} p="0">
           <Main isOpen={isOpenLogin} onClose={onCloseLogin} />
         </Box>
       </Box>
@@ -144,7 +144,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
         mx="8"
         justifyContent="space-between"
         marginBlockEnd="10px">
-        <NavLink href="/">
+        <NavLink to="/">
           <Logo width={{ base: '20%', md: '40%' }} />
         </NavLink>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
