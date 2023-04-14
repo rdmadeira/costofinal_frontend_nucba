@@ -11,7 +11,7 @@ import {
   Button,
   useToast,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FiEdit } from 'react-icons/fi';
 import { useForm, Controller } from 'react-hook-form';
@@ -25,6 +25,9 @@ const Account = () => {
   const inputsArrayToRender = inputsArray.filter(
     (item) => item !== 'contraseña' && item !== 'confirme la contraseña'
   );
+
+  const useRefs = useRef(inputsArrayToRender.map(() => React.createRef()));
+
   const dispatch = useDispatch();
   const toast = useToast();
 
@@ -55,7 +58,7 @@ const Account = () => {
         CP: data.CP,
       },
     };
-    console.log(updatedData);
+
     upDateDataToDB(updatedData).then((res) => {
       if (res.isSuccesful) {
         toast({
@@ -84,7 +87,7 @@ const Account = () => {
           justify={'center'}
           width={'80%'}
           spacing={[5, 3]}>
-          {inputsArrayToRender.map((inputKey) => {
+          {inputsArrayToRender.map((inputKey, index) => {
             return (
               <WrapItem
                 key={user.uid + inputKey}
@@ -117,13 +120,12 @@ const Account = () => {
                             user['dirección'][inputKey] ||
                             user['phone'],
                           name = inputKey,
-                          ref,
                         },
                       }) => (
                         <>
                           <Input
                             {...register(inputKey)}
-                            ref={ref}
+                            ref={useRefs.current && useRefs.current[index]}
                             name={name}
                             id={name}
                             type={
@@ -136,9 +138,10 @@ const Account = () => {
                             }
                             onChange={onChange}
                             onBlur={() => {
-                              document
-                                .getElementsByName(inputKey)[0]
-                                .toggleAttribute('disabled');
+                              useRefs.current[index] &&
+                                useRefs.current[index].current.toggleAttribute(
+                                  'disabled'
+                                );
                             }}
                             value={value}
                             placeholder={
@@ -158,7 +161,8 @@ const Account = () => {
                                 borderLeftRadius={'none'}
                                 onClick={() => {
                                   const myInput =
-                                    document.getElementsByName(inputKey)[0];
+                                    useRefs.current[index] &&
+                                    useRefs.current[index].current;
                                   myInput.toggleAttribute('disabled');
                                   myInput.focus();
                                 }}>
