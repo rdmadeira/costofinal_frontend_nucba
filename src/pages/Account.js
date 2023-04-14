@@ -9,19 +9,24 @@ import {
   InputGroup,
   InputRightElement,
   Button,
+  useToast,
 } from '@chakra-ui/react';
 import React from 'react';
-import { useSelector } from 'react-redux';
-import Input from '../components/forms/Input';
+import { useDispatch, useSelector } from 'react-redux';
 import { FiEdit } from 'react-icons/fi';
-import { inputsArray } from '../utils/inputsArray';
 import { useForm, Controller } from 'react-hook-form';
+import Input from '../components/forms/Input';
+import { inputsArray } from '../utils/inputsArray';
+import { upDateDataToDB } from '../firebase/auth';
+import { setUser } from '../redux/user/userActions';
 
 const Account = () => {
   const user = useSelector((store) => store.user);
   const inputsArrayToRender = inputsArray.filter(
     (item) => item !== 'contraseña' && item !== 'confirme la contraseña'
   );
+  const dispatch = useDispatch();
+  const toast = useToast();
 
   const { handleSubmit, register, control } = useForm({
     mode: 'onChange',
@@ -38,7 +43,31 @@ const Account = () => {
   });
 
   const onSubmitHandle = (data) => {
-    console.log(data);
+    const updatedData = {
+      ...user,
+      nombre: data.nombre,
+      apellido: data.apellido,
+      phone: data.telefono,
+      dirección: {
+        localidad: data.localidad,
+        calle: data.calle,
+        numero: data.numero,
+        CP: data.CP,
+      },
+    };
+    console.log(updatedData);
+    upDateDataToDB(updatedData).then((res) => {
+      if (res.isSuccesful) {
+        toast({
+          title: user.displayName,
+          description: 'Cambios guardados con suceso!',
+          status: 'success',
+          isClosable: true,
+        });
+        dispatch(setUser(updatedData));
+        return;
+      }
+    });
   };
 
   return (
@@ -83,7 +112,7 @@ const Account = () => {
                       render={({
                         field: {
                           onChange,
-                          onBlur,
+
                           value = user[inputKey] ||
                             user['dirección'][inputKey] ||
                             user['phone'],
@@ -106,7 +135,11 @@ const Account = () => {
                                 : 'text'
                             }
                             onChange={onChange}
-                            onBlur={onBlur}
+                            onBlur={() => {
+                              document
+                                .getElementsByName(inputKey)[0]
+                                .toggleAttribute('disabled');
+                            }}
                             value={value}
                             placeholder={
                               user[inputKey] || user['dirección'][inputKey]
@@ -117,19 +150,22 @@ const Account = () => {
                               outline: '1px solid gray',
                             }}
                           />
-                          <InputRightElement h="100%">
-                            <Button
-                              p="1"
-                              bg={'green.100'}
-                              borderLeftRadius={'none'}
-                              onClick={() => {
-                                document
-                                  .getElementsByName(inputKey)[0]
-                                  .toggleAttribute('disabled');
-                              }}>
-                              <FiEdit width="100%" color="gray" />
-                            </Button>
-                          </InputRightElement>
+                          {inputKey !== 'email' && (
+                            <InputRightElement h="100%">
+                              <Button
+                                p="1"
+                                bg={'green.100'}
+                                borderLeftRadius={'none'}
+                                onClick={() => {
+                                  const myInput =
+                                    document.getElementsByName(inputKey)[0];
+                                  myInput.toggleAttribute('disabled');
+                                  myInput.focus();
+                                }}>
+                                <FiEdit width="100%" color="gray" />
+                              </Button>
+                            </InputRightElement>
+                          )}
                         </>
                       )}
                     />
@@ -142,7 +178,7 @@ const Account = () => {
 
           <WrapItem alignSelf={'center'} justifyContent={'flex-end'} w={'100%'}>
             <Button type="submit" colorScheme="green" mt={'5'}>
-              Grabar cambios
+              Guardar cambios
             </Button>
           </WrapItem>
         </Wrap>

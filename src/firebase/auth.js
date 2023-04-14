@@ -81,6 +81,21 @@ export const getUserFromDB = async (userId) => {
   return userData;
 };
 
+export const upDateDataToDB = async (updatedData) => {
+  const userRef = doc(db, 'users', updatedData.uid);
+  let response = { isSuccesful: null, message: null };
+  await setDoc(userRef, updatedData)
+    .then(() => {
+      response.isSuccesful = true;
+      return;
+    })
+    .catch((err) => {
+      response = { isSuccesful: false, message: err.code };
+      return;
+    });
+  return response;
+};
+
 export const signOut = () => {
   return auth.signOut();
 };

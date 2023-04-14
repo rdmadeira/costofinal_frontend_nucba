@@ -55,6 +55,7 @@ const SignUpForm = ({ onClose, loginState: { isLogin, setisLogin } }) => {
         }
       });
     }
+
     return loginUserHandle(data).then((res) => {
       if (res.isSuccesful) {
         setisSuccessRequest(true);
