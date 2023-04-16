@@ -53,8 +53,8 @@ const Orders = () => {
   }, [dispatch, getOrders, getOrdersAction]);
 
   return (
-    <VStack>
-      <Heading as="h6" size="sm" color="gray.500">
+    <VStack spacing={5} py={'5'} px={'3'}>
+      <Heading as="h6" size="sm" color="#4146a3b5">
         Mis Pedidos
       </Heading>
 
@@ -63,10 +63,10 @@ const Orders = () => {
       ) : (
         <>
           {orders.length < 1 && <Text>Todavía no tenés pedidos.</Text>}
-          <SimpleGrid spacing={'4'}>
+          <SimpleGrid spacing={'4'} placeItems="center">
             {orders.map((order) => {
               return (
-                <Card key={order.id}>
+                <Card key={order.id} w="80%">
                   <CardHeader>
                     <HStack spacing={'4'}>
                       <Box>

@@ -74,7 +74,7 @@ const Account = () => {
   };
 
   return (
-    <VStack w={'100%'} alignItems="center" spacing={'6'}>
+    <VStack w={'100%'} alignItems="center" spacing={'6'} py={'5'}>
       <Heading size="sm" color="gray.500">
         Mis datos
       </Heading>

@@ -26,8 +26,10 @@ const Products = () => {
         display: 'flex',
         justifyContent: 'center',
       }}
-      w="100%">
-      <Heading as="h6" size={'md'} color="gray.400">
+      w="100%"
+      py={'5'}
+      px={'10'}>
+      <Heading as="h6" size={'md'} color="#4146a3b5">
         {products && productType}
       </Heading>
       <Divider />

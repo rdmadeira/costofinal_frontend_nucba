@@ -13,21 +13,22 @@ const Home = () => {
   }, [sendItemsToCarrousel, setitemsToCarousel]);
 
   return (
-    <VStack height="80vh" spacing={8}>
-      <Box
-        pos={'absolute'}
-        bgImage={`url(${process.env.PUBLIC_URL}/assets/plumbing-home.jpg)`}
-        bgColor={'#f0fff4e0'}
-        bgSize="cover"
-        bgRepeat="no-repeat"
-        w={{ base: '100vw', md: `calc(100vw - 13rem)` }}
-        h={'85vh'}
-        bgBlendMode={'lighten'}></Box>
-      <Heading zIndex={'overlay'} alignSelf="center" color={'#424a9d'}>
-        Costo Final
-      </Heading>
-      <CustomCarousel items={itemsToCarousel} focusOnSelect={true} />
-    </VStack>
+    <Box
+      bgImage={`url(${process.env.PUBLIC_URL}/assets/plumbing-home.jpg)`}
+      bgColor={'#f0fff4e0'}
+      bgSize="cover"
+      bgRepeat="no-repeat"
+      w={{ base: '100vw', md: `calc(100vw - 13rem)` }}
+      bgBlendMode={'lighten'}
+      paddingY={5}
+      minH="88vh">
+      <VStack spacing={'8'}>
+        <Heading zIndex={'overlay'} alignSelf="center" color={'#424a9d'}>
+          Costo Final
+        </Heading>
+        <CustomCarousel items={itemsToCarousel} focusOnSelect={true} />
+      </VStack>
+    </Box>
   );
 };
 

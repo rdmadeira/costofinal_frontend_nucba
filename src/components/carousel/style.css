@@ -2,6 +2,12 @@
   width: 80%;
   max-width: 680px;
 }
+@media screen and (max-width: 920px) {
+  .carousel-container {
+    max-width: 420px;
+    width: 80%;
+  }
+}
 
 /* .carousel-item {
   width: 50%;

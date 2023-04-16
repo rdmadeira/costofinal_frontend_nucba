@@ -36,7 +36,7 @@ const ProductLine = ({ subProd }) => {
           onClick={() => setcantidad((c) => c - 1)}>
           -
         </Button>
-        <Text as={'span'} fontSize={{ base: 'md', md: 'sm' }}>
+        <Text as={'span'} fontSize={{ base: 'md', md: 'sm' }} m="3">
           {cantidad}
         </Text>
         <Button

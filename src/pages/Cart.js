@@ -1,27 +1,20 @@
 import React, { useReducer } from 'react';
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
   TableContainer,
   Heading,
   VStack,
   Button,
   Divider,
   Spinner,
+  ButtonGroup,
 } from '@chakra-ui/react';
 import { useSelector, useDispatch } from 'react-redux';
-import { formatPrices } from '../utils/product_utils/product_utils';
 import { createOrder } from '../utils/orders_utils/orderUtils';
 import { createOrderToDatabase } from '../firebase/firestore';
 import { resetCartAction } from '../redux/cart/cartActions';
 import { CheckIcon, WarningTwoIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
+import CartTable from '../components/cart/CartTable';
 
 const initialState = {
   isLoading: false,
@@ -78,82 +71,54 @@ const Cart = () => {
     });
   };
   return (
-    <VStack spacing="5">
-      <Heading as="h6" size="sm" color="gray.500">
+    <VStack spacing="5" paddingY={5}>
+      <Heading as="h6" size="sm" color="#4146a3b5">
         Mi Carrito
       </Heading>
       <TableContainer whiteSpace="pre-wrap">
-        <Table variant="simple" size="sm">
-          <TableCaption>
-            {cart.length > 0
-              ? 'Este carrito será agregado a sus pedidos.'
-              : 'No hay productos en el carrito'}
-          </TableCaption>
-          <Thead>
-            <Tr>
-              <Th textAlign="center">CODIGO</Th>
-              <Th textAlign="center">DESCIPCION</Th>
-              <Th textAlign="center">PRECIO</Th>
-              <Th textAlign="center">CANTIDAD</Th>
-              <Th textAlign="center">SUBTOTAL</Th>
-            </Tr>
-          </Thead>
-
-          <Tbody borderBottom="solid 2px" borderColor="gray.300">
-            {cart &&
-              cart.map((cartItem) => {
-                return (
-                  <Tr key={cartItem.id + cartItem['CODIGO']}>
-                    <Td textAlign="center">{cartItem.CODIGO}</Td>
-                    <Td textAlign="center">{cartItem.MEDIDA}</Td>
-                    <Td textAlign="center">{formatPrices(cartItem.PRECIO)}</Td>
-                    <Td textAlign="center">{cartItem.quantity}</Td>
-                    <Td textAlign="center">
-                      {formatPrices(cartItem.PRECIO * cartItem.quantity)}
-                    </Td>
-                  </Tr>
-                );
-              })}
-          </Tbody>
-          <Tfoot>
-            {
-              <Tr>
-                <Th></Th>
-                <Th></Th>
-                <Th></Th>
-                <Th>Total del carrito: </Th>
-                <Th>
-                  {formatPrices(
-                    cart.reduce(
-                      (acc, curr) => acc + curr.PRECIO * curr.quantity,
-                      0
-                    )
-                  )}
-                </Th>
-              </Tr>
-            }
-          </Tfoot>
-        </Table>
+        <CartTable />
         <Divider size="lg" orientation="horizontal" colorScheme={'blue'} />
         {cart.length > 0 && (
-          <Button
-            isDisabled={estado.isLoading || cart.length === 0}
-            rightIcon={
-              estado.isLoading ? (
-                <Spinner />
-              ) : estado.isSuccessful ? (
-                <CheckIcon />
-              ) : estado.isError ? (
-                <WarningTwoIcon />
-              ) : null
-            }
-            variant={estado.isSuccessful ? 'solid' : 'outline'}
-            colorScheme="green"
-            float="right"
-            onClick={createOrderHandle}
-            mt={4}>
-            Enviar pedido
-          </Button>
+          <ButtonGroup spacing={5} position={'fixed'} right="2">
+            <Button
+              isDisabled={estado.isLoading || estado.isSuccessful}
+              rightIcon={
+                estado.isLoading ? (
+                  <Spinner />
+                ) : estado.isSuccessful ? (
+                  <CheckIcon />
+                ) : estado.isError ? (
+                  <WarningTwoIcon />
+                ) : null
+              }
+              variant={estado.isSuccessful ? 'solid' : 'outline'}
+              colorScheme="green"
+              float="right"
+              onClick={() => dispatch(resetCartAction())}
+              mt={4}
+              _hover={{ background: 'green.100' }}>
+              Limpiar carrito
+            </Button>
+            <Button
+              isDisabled={estado.isLoading || estado.isSuccessful}
+              rightIcon={
+                estado.isLoading ? (
+                  <Spinner />
+                ) : estado.isSuccessful ? (
+                  <CheckIcon />
+                ) : estado.isError ? (
+                  <WarningTwoIcon />
+                ) : null
+              }
+              variant={estado.isSuccessful ? 'solid' : 'outline'}
+              colorScheme="green"
+              float="right"
+              onClick={createOrderHandle}
+              mt={4}
+              _hover={{ background: 'green.100' }}>
+              Enviar pedido
+            </Button>
+          </ButtonGroup>
         )}
       </TableContainer>
     </VStack>

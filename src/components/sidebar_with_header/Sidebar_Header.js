@@ -62,7 +62,7 @@ export default function SidebarWithHeader() {
 
   return (
     <OpenLoginContext.Provider value={onOpenLogin}>
-      <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
+      <Box minH="100vh" bg="green.50">
         <SidebarContent
           onClose={() => onClose}
           display={{ base: 'none', md: 'block' }}
@@ -94,7 +94,7 @@ export default function SidebarWithHeader() {
         </Modal>
 
         <MobileNav
-          boxShadow="8px 4px 13px 2px #00000036"
+          boxShadow="3px 2px 5px 0px #00000036"
           position="relative"
           zIndex="5"
           onOpen={onOpen}
@@ -133,6 +133,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
 
   return (
     <Box
+      boxShadow={'2px 0px 5px 0px #00000036'}
       transition="3s ease"
       bg={useColorModeValue('green.50', 'gray.900')}
       borderRight="1px"

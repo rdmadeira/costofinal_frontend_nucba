@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import './style.css';
@@ -15,6 +16,10 @@ import {
   Divider,
 } from '@chakra-ui/react';
 import { formatPrices } from '../../utils/product_utils/product_utils';
+import { useContext } from 'react';
+import { OpenLoginContext } from '../sidebar_with_header/Sidebar_Header';
+import { addItemToCart } from '../../utils/cart_utils/cartUtils';
+import { addItemToCartAction } from '../../redux/cart/cartActions';
 
 const responsive = {
   superLargeDesktop: {
@@ -23,7 +28,7 @@ const responsive = {
     items: 5,
   },
   desktop: {
-    breakpoint: { max: 3000, min: 1024 },
+    breakpoint: { max: 3000, min: 921 },
     items: 3,
   },
   tablet: {
@@ -37,43 +42,62 @@ const responsive = {
 };
 
 const CustomCarousel = ({ items }) => {
+  const onOpenLogin = useContext(OpenLoginContext);
+  const user = useSelector((store) => store.user);
+  const cart = useSelector((store) => store.cart);
+  const dispatch = useDispatch();
+
+  const addToCartHandle = (item) => {
+    if (user) {
+      item = { ...item, quantity: 1 };
+      const updatedCart = addItemToCart(item, cart);
+      dispatch(addItemToCartAction(updatedCart));
+
+      return;
+    }
+    onOpenLogin();
+    return;
+  };
+
   return (
     <Carousel
       infinite
-      focusOnSelect={true}
       draggable={false}
       autoPlay={true}
       transitionDuration={500}
       responsive={responsive}
       containerClass="carousel-container"
       itemClass="carousel-item"
-      pauseOnHover>
+      pauseOnHover={true}>
       {items &&
         items.map((item) => {
           return (
             <Box key={item.id} h="100%">
               <Card
                 h={'100%'}
-                size={{ base: 'md', md: 'sm' }}
+                size={{ base: 'md', sm: 'sm' }}
                 align={'center'}
                 justify="center">
                 <CardHeader /* h={'33%'} */ textAlign="center">
                   <VStack alignContent={'center'}>
-                    <Image src={item.image} h={{ base: '9rem', md: '4rem' }} />
-                    <Text fontSize={{ base: 'lg', md: 'sm' }}>
+                    <Image
+                      src={process.env.PUBLIC_URL + item.image}
+                      h={{ base: '9rem', sm: '4rem' }}
+                    />
+                    <Text fontSize={{ base: 'lg', sm: 'sm' }}>
                       {item.familia}
                     </Text>
                   </VStack>
                 </CardHeader>
                 <CardBody display={'flex'} alignItems="flex-end">
-                  <VStack spacing={{ base: 6, md: 3 }}>
+                  <VStack spacing={{ base: 6, sm: 3 }}>
                     <Box>
-                      <Text fontSize={{ base: 'lg', md: 'sm' }}>
+                      <Text fontSize={{ base: 'lg', sm: 'sm' }}>
                         {item['MEDIDA']}
                       </Text>
                     </Box>
                     <Box bg={'#424a9d'} p="2" borderRadius={'md'}>
-                      <Text fontSize={{ base: 'lg', md: 'sm' }} color="white">
+                      <Text fontSize={{ base: 'lg', sm: 'sm' }} color="white">
                         {formatPrices(item['PRECIO'])} /un
                       </Text>
                     </Box>
@@ -81,7 +105,10 @@ const CustomCarousel = ({ items }) => {
                 </CardBody>
                 <Divider color={'gray.300'} />
                 <CardFooter>
-                  <Button colorScheme={'green'} size={{ base: 'lg', md: 'sm' }}>
+                  <Button
+                    colorScheme={'green'}
+                    size={{ base: 'lg', md: 'sm' }}
+                    onClick={() => addToCartHandle(item)}>
                     Compre Ahora
                   </Button>
                 </CardFooter>
