@@ -24,3 +24,17 @@ export const getProducts = async () => {
     .catch((err) => console.log(err));
   return products;
 };
+
+export const sendItemsToCarrousel = async () => {
+  const productosJson = await getProducts();
+  let respuesta = Object.keys(productosJson).map((productoKey) => {
+    return {
+      ...productosJson[productoKey][
+        Object.keys(productosJson[productoKey])[0]
+      ][0],
+      familia: productoKey,
+    };
+  });
+
+  return respuesta;
+};

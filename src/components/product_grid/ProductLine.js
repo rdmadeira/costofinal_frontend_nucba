@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Tr, Td, IconButton } from '@chakra-ui/react';
+import { Button, Tr, Td, IconButton, Text } from '@chakra-ui/react';
 import { addItemToCartAction } from '../../redux/cart/cartActions';
 import { formatPrices } from '../../utils/product_utils/product_utils';
 import { addItemToCart } from '../../utils/cart_utils/cartUtils';
@@ -29,15 +29,19 @@ const ProductLine = ({ subProd }) => {
       <Td width="10%">{subProd['CODIGO']}</Td>
       <Td width="45%">{subProd['MEDIDA']}</Td>
       <Td width="15%">{formatPrices(subProd['PRECIO'])}</Td>
-      <Td width="20%">
+      <Td width="20%" whiteSpace={'nowrap'}>
         <Button
           isDisabled={cantidad >= 2 ? false : true}
-          size="sm"
+          size={{ base: 'lg', md: 'sm' }}
           onClick={() => setcantidad((c) => c - 1)}>
           -
         </Button>
-        {cantidad}
-        <Button size="sm" onClick={() => setcantidad(cantidad + 1)}>
+        <Text as={'span'} fontSize={{ base: 'md', md: 'sm' }}>
+          {cantidad}
+        </Text>
+        <Button
+          onClick={() => setcantidad(cantidad + 1)}
+          size={{ base: 'lg', md: 'sm' }}>
           +
         </Button>
       </Td>

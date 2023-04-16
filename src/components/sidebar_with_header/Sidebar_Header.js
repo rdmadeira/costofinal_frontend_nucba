@@ -94,6 +94,9 @@ export default function SidebarWithHeader() {
         </Modal>
 
         <MobileNav
+          boxShadow="8px 4px 13px 2px #00000036"
+          position="relative"
+          zIndex="5"
           onOpen={onOpen}
           onOpenLogin={onOpenLogin}
           signoutOnOpen={signoutOnOpen}
@@ -151,7 +154,10 @@ const SidebarContent = ({ onClose, ...rest }) => {
       </Flex>
       {menuItems?.map((link) => (
         <NavLink to={`products/${link.path}`} key={link.name} onClick={onClose}>
-          <NavItem icon={link.icon} fontSize="xs" color="gray.500">
+          <NavItem
+            icon={link.icon}
+            fontSize={{ base: 'md', md: 'xs' }}
+            color="gray.500">
             {link.name}
           </NavItem>
         </NavLink>
@@ -233,7 +239,8 @@ const MobileNav = ({
       />
 
       <Logo
-        width="8%"
+        width="12%"
+        maxWidth="56px"
         display={{ base: 'flex', md: 'none' }}
         position="absolute"
         left="calc(50vw - 4%)"

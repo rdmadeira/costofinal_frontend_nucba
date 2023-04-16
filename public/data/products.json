@@ -6,7 +6,8 @@
         "MEDIDA": "Buje 3/4 x 1/2",
         "PRECIO": 250.3116,
         "TIPO": "Bujes",
-        "id": "9e4aa267-acb9-484d-9550-4b3deb769c90"
+        "id": "9e4aa267-acb9-484d-9550-4b3deb769c90",
+        "image": "/assets/bronce_agua_buje.jpg"
       },
       {
         "CODIGO": "B112BR",
@@ -238,7 +239,8 @@
         "MEDIDA": "Buje Reducción 1/4 x 1/8",
         "PRECIO": 65.1075796353247,
         "TIPO": "Bujes de Reduccion",
-        "id": "f27eda87-c702-4e65-bcfa-01d2e54cb04d"
+        "id": "f27eda87-c702-4e65-bcfa-01d2e54cb04d",
+        "image": "/assets/bronce_trafilado_buje_reduccion.jpg"
       },
       {
         "CODIGO": 3818,
@@ -1048,10 +1050,11 @@
     "Codos": [
       {
         "CODIGO": "HH18",
-        "MEDIDA": "Codo Hembra -Hembra 1/8 ",
+        "MEDIDA": "Codo Hembra -Hembra 1/8  ",
         "PRECIO": 259.813125,
         "TIPO": "Codos",
-        "id": "f2133219-efb4-4d38-bb88-2687218073b3"
+        "id": "f2133219-efb4-4d38-bb88-2687218073b3",
+        "image": "/assets/codos_tees_gas_codos_hh.jpg"
       },
       {
         "CODIGO": "HH14",
@@ -1326,14 +1329,15 @@
     "Termocuplas solas": [
       {
         "CODIGO": "TEURO30",
-        "MEDIDA": "Termocuplas   Euro  30 cm",
+        "MEDIDA": "Termocuplas Euro 30 cm",
         "PRECIO": 424.56,
         "TIPO": "Termocuplas solas",
-        "id": "53958b27-c116-4d9b-a875-6bae0680dd03"
+        "id": "53958b27-c116-4d9b-a875-6bae0680dd03",
+        "image": "/assets/termocuplas_termocupla_sola.jpg"
       },
       {
         "CODIGO": "TEURO50",
-        "MEDIDA": "Termocuplas   Euro 50 cm",
+        "MEDIDA": "Termocuplas Euro 50 cm",
         "PRECIO": 526.82,
         "TIPO": "Termocuplas solas",
         "id": "0a4f358a-4575-4cbe-b112-28aec498fbd6"
@@ -1689,7 +1693,8 @@
         "MEDIDA": "Espiga doble 1/2",
         "PRECIO": 11.37162,
         "TIPO": "Espigas doble",
-        "id": "e4b36b2d-d83a-4839-a415-7c2eb85f75fd"
+        "id": "e4b36b2d-d83a-4839-a415-7c2eb85f75fd",
+        "image": "/assets/polietileno_espiga_doble.jpg"
       },
       {
         "CODIGO": "ED34",
@@ -1988,7 +1993,8 @@
         "MEDIDA": "BUJE 20 X 25 FUSION",
         "PRECIO": 20.55375,
         "TIPO": "Buje Fusion",
-        "id": "6a47232e-4af5-4357-9b0d-91f75dcabe24"
+        "id": "6a47232e-4af5-4357-9b0d-91f75dcabe24",
+        "image": "/assets/termofusion_buje_reduccion.jpg"
       }
     ],
     "Codos": [
@@ -2498,7 +2504,8 @@
         "MEDIDA": "Codo Hembra - Hembra 90 º 1/2",
         "PRECIO": 27.08355,
         "TIPO": "Codos",
-        "id": "c6cbd762-5186-48ad-9114-23bfb5535f30"
+        "id": "c6cbd762-5186-48ad-9114-23bfb5535f30",
+        "image": "/assets/polipropileno_codo_90_hh.jpg"
       },
       {
         "CODIGO": "CODOHH34P",
@@ -2868,7 +2875,8 @@
         "MEDIDA": "Rejilla de ventilacion  20x40  800cm3 para gabinete gas",
         "PRECIO": 577.5,
         "TIPO": "Rejillas",
-        "id": "7f052c4e-e451-455f-849e-4a60bd012107"
+        "id": "7f052c4e-e451-455f-849e-4a60bd012107",
+        "image": "/assets/rejillas_ventilacion_20x40_800.jpg"
       },
       {
         "CODIGO": "R15S100",
