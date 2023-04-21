@@ -20,6 +20,7 @@ import { useContext } from 'react';
 import { OpenLoginContext } from '../sidebar_with_header/Sidebar_Header';
 import { addItemToCart } from '../../utils/cart_utils/cartUtils';
 import { addItemToCartAction } from '../../redux/cart/cartActions';
+import AlertMessage from '../ui/AlertMessage.jsx';
 
 const responsive = {
   superLargeDesktop: {
@@ -88,6 +89,21 @@ const CustomCarousel = ({ items }) => {
                       {item.familia}
                     </Text>
                   </VStack>
+                  <AlertMessage
+                    w="60px"
+                    h="60px"
+                    fontSize="2xs"
+                    pos="absolute"
+                    right="5px"
+                    top="0px">
+                    <Text zIndex={'50'} pos="relative" fontWeight={'bold'}>
+                      Pedido Mínimo:
+                      <Text as="span" fontSize={'md'} display="block">
+                        {item.TIPO === 'Rejillas' ? '10' : '20'}
+                      </Text>
+                      unidades
+                    </Text>
+                  </AlertMessage>
                 </CardHeader>
                 <CardBody display={'flex'} alignItems="flex-end">
                   <VStack spacing={{ base: 6, sm: 3 }}>
