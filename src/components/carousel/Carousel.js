@@ -125,7 +125,7 @@ const CustomCarousel = ({ items }) => {
                     colorScheme={'green'}
                     size={{ base: 'lg', md: 'sm' }}
                     onClick={() => addToCartHandle(item)}>
-                    Compre Ahora
+                    Compre Ahora {item.TIPO === 'Rejillas' ? '10' : '20'} un.
                   </Button>
                 </CardFooter>
               </Card>
