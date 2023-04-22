@@ -50,7 +50,7 @@ const CustomCarousel = ({ items }) => {
 
   const addToCartHandle = (item) => {
     if (user) {
-      item = { ...item, quantity: 1 };
+      item = { ...item, quantity: item.TIPO === 'Rejillas' ? 10 : 20 };
       const updatedCart = addItemToCart(item, cart);
       dispatch(addItemToCartAction(updatedCart));
 

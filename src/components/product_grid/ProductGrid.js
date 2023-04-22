@@ -20,14 +20,19 @@ const ProductGrid = ({ product }) => {
           <Tr>
             <Th width="10%">CODIGO</Th>
             <Th width="35%">MEDIDA</Th>
-            <Th width="20%">PRECIO</Th>
+            <Th width="20%">PRECIO/ UN.</Th>
             <Th width="25%">CANTIDAD</Th>
             <Th width="10%">AGREGAR</Th>
           </Tr>
         </Thead>
         <Tbody>
           {product.map((subProd) => {
-            return <ProductLine subProd={subProd} key={subProd['CODIGO']} />;
+            return (
+              <ProductLine
+                subProd={subProd}
+                key={subProd['CODIGO'] + subProd.id}
+              />
+            );
           })}
         </Tbody>
         <Tfoot>

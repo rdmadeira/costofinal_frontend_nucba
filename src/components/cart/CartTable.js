@@ -27,8 +27,8 @@ const CartTable = () => {
           <Thead>
             <Tr>
               <Th textAlign="center">CODIGO</Th>
-              <Th textAlign="center">DESCIPCION</Th>
-              <Th textAlign="center">PRECIO</Th>
+              <Th textAlign="center">DESCRIPCION</Th>
+              <Th textAlign="center">PRECIO/ UN.</Th>
               <Th textAlign="center">CANTIDAD</Th>
               <Th textAlign="center">SUBTOTAL</Th>
             </Tr>

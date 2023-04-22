@@ -47,7 +47,10 @@ const Products = () => {
                   </AccordionButton>
                   <AccordionPanel>
                     <VStack>
-                      <ProductGrid product={products[productType][product]} />
+                      <ProductGrid
+                        product={products[productType][product]}
+                        productType={productType}
+                      />
                     </VStack>
                   </AccordionPanel>
                 </AccordionItem>

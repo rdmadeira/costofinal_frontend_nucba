@@ -79,7 +79,11 @@ const Cart = () => {
         <CartTable />
         <Divider size="lg" orientation="horizontal" colorScheme={'blue'} />
         {cart.length > 0 && (
-          <ButtonGroup spacing={5} position={'fixed'} right="2">
+          <ButtonGroup
+            spacing={5}
+            position={'relative'}
+            float={'right'}
+            mr="10px">
             <Button
               isDisabled={estado.isLoading || estado.isSuccessful}
               rightIcon={
