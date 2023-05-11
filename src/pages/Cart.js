@@ -9,7 +9,7 @@ import {
   ButtonGroup,
 } from '@chakra-ui/react';
 import { useSelector, useDispatch } from 'react-redux';
-import { createOrder } from '../utils/orders_utils/orderUtils';
+import { createOrder, sendMail } from '../utils/orders_utils/orderUtils';
 import { createOrderToDatabase } from '../firebase/firestore';
 import { resetCartAction } from '../redux/cart/cartActions';
 import { CheckIcon, WarningTwoIcon } from '@chakra-ui/icons';
@@ -58,9 +58,15 @@ const Cart = () => {
 
   const createOrderHandle = () => {
     const newOrder = createOrder(user.uid, cart);
+    const orderDataToMail = {
+      ...newOrder,
+      email: user.email,
+      name: user.nombre,
+    };
     redDispatch({ type: 'loading' });
     createOrderToDatabase(user.uid, newOrder).then((res) => {
       if (res.isSuccess) {
+        sendMail(orderDataToMail);
         redDispatch({ type: 'success' });
         setTimeout(() => {
           dispatch(resetCartAction());
