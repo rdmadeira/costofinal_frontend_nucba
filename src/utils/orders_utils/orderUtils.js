@@ -25,7 +25,7 @@ export const sendMail = async (bodyData) => {
       'content-type': 'application/json; charset=UTF-8',
     },
 
-    method: 'post',
+    method: 'POST',
     body: JSON.stringify(bodyData),
   }).then((res) => {
     alert('Enviado su pedido por Email');
