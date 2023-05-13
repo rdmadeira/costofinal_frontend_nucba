@@ -31,8 +31,9 @@ export const sendMail = async (bodyData) => {
     .then((res) => {
       console.log(res);
     })
-    .then(() =>
-      alert('Pedido enviado con suceso. Recibirá un email con el pedido')
-    );
+    .catch((err) => {
+      throw new Error(err);
+    });
+
   return;
 };
