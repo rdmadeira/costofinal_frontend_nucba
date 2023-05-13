@@ -64,17 +64,28 @@ const Cart = () => {
       name: user.nombre,
     };
     redDispatch({ type: 'loading' });
-    createOrderToDatabase(user.uid, newOrder).then((res) => {
-      if (res.isSuccess) {
-        sendMail(orderDataToMail);
-        redDispatch({ type: 'success' });
-        setTimeout(() => {
-          dispatch(resetCartAction());
-          redDispatch({ type: 'reset' });
-          navigate('/orders');
-        }, 1200);
-      }
-    });
+    createOrderToDatabase(user.uid, newOrder)
+      .then((res) => {
+        if (res.isSuccess) {
+          sendMail(orderDataToMail)
+            .then(() =>
+              alert(
+                'Pedido creado con suceso! Recibirás un email con detalles del pedido'
+              )
+            )
+            .catch(() => alert('Ocurrió un error inesperado'));
+          redDispatch({ type: 'success' });
+          setTimeout(() => {
+            dispatch(resetCartAction());
+            redDispatch({ type: 'reset' });
+            navigate('/orders');
+          }, 1200);
+        }
+      })
+      .catch((err) => {
+        alert('Ocurrió un error inesperado. Pruebe más tarde');
+        throw new Error(err);
+      });
   };
   return (
     <VStack spacing="5" paddingY={5}>

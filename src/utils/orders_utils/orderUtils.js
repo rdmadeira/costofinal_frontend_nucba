@@ -27,9 +27,12 @@ export const sendMail = async (bodyData) => {
 
     method: 'POST',
     body: JSON.stringify(bodyData),
-  }).then((res) => {
-    alert('Enviado su pedido por Email');
-    console.log(res.json());
-  });
+  })
+    .then((res) => {
+      console.log(res);
+    })
+    .then(() =>
+      alert('Pedido enviado con suceso. Recibirá un email con el pedido')
+    );
   return;
 };
