@@ -13,16 +13,18 @@ export const createOrder = (userId, cart) => {
 };
 
 export const sendMail = async (bodyData) => {
-  const url = 'https://costofinal-b391b.web.app/api/mailing';
+  const url =
+    'https://us-central1-costofinal-b391b.cloudfunctions.net/app/api/mailing';
 
   /* const url2 =
-    'http://127.0.0.1:5001/costofinal-b391b/us-central1/app/api/mailing';
+    'https://us-central1-costofinal-b391b.cloudfunctions.net/app';
   */
 
   await fetch(url, {
     headers: {
       'content-type': 'application/json; charset=UTF-8',
     },
+
     method: 'post',
     body: JSON.stringify(bodyData),
   }).then((res) => {
