@@ -13,12 +13,13 @@ export const createOrder = (userId, cart) => {
 };
 
 export const sendMail = async (bodyData) => {
-  /* const url =
-    'http://127.0.0.1:5001/costofinal-backend-functions/us-central1/app/api/mailing'; */
+  const url = 'https://costofinal-b391b.web.app/api/mailing';
 
-  const url2 =
+  /* const url2 =
     'http://127.0.0.1:5001/costofinal-b391b/us-central1/app/api/mailing';
-  await fetch(url2, {
+  */
+
+  await fetch(url, {
     headers: {
       'content-type': 'application/json; charset=UTF-8',
     },
