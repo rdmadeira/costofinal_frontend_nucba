@@ -15,14 +15,19 @@ import { Controller, useForm } from 'react-hook-form';
 import Input from './Input';
 import { BsCheck } from 'react-icons/bs';
 import { RxCross2 } from 'react-icons/rx';
-import { createUser, loginUserHandle } from '../../firebase/auth';
+import {
+  createUser,
+  loginUserHandle,
+  resetPassword,
+} from '../../firebase/auth';
 import { inputsArray } from '../../utils/inputsArray';
 
 const SignUpForm = ({ onClose, loginState: { isLogin, setisLogin } }) => {
-  const { register, handleSubmit, control, formState, getValues } = useForm({
-    mode: 'onSubmit',
-    reValidateMode: 'onChange',
-  });
+  const { register, handleSubmit, control, formState, getValues, setError } =
+    useForm({
+      mode: 'onSubmit',
+      reValidateMode: 'onChange',
+    });
 
   const [isSuccessRequest, setisSuccessRequest] = useState(null);
   const toast = useToast();
@@ -79,6 +84,16 @@ const SignUpForm = ({ onClose, loginState: { isLogin, setisLogin } }) => {
   };
 
   const inputNames = isLogin ? ['email', 'contraseña'] : inputsArray;
+
+  const resetPasswordHandle = () => {
+    const email = getValues().email;
+    if (!email) {
+      setError('email', { type: 'required' });
+      alert('Por favor, escriba su email!');
+    } else {
+      resetPassword(email);
+    }
+  };
 
   return (
     <Box>
@@ -168,6 +183,15 @@ const SignUpForm = ({ onClose, loginState: { isLogin, setisLogin } }) => {
               onClick={() => setisLogin(!isLogin)}
               style={{ fontWeight: 'bold', color: 'blue' }}>
               {isLogin ? 'Registrese' : 'Ingrese Aqui'}
+            </button>
+          </Text>
+          <Text>
+            Olvidaste tu contraseña?{' '}
+            <button
+              type="button"
+              onClick={resetPasswordHandle}
+              style={{ fontWeight: 'bold', color: 'blue' }}>
+              Restablecer
             </button>
           </Text>
         </VStack>
