@@ -8,10 +8,7 @@ const CartLine = ({ cartItem, formatPrices }) => {
   const [cantidad, setcantidad] = useState(cartItem.quantity);
   const dispatch = useDispatch();
   const cart = useSelector((store) => store.cart);
-  const isRejasOTapas =
-    cartItem.TIPO === 'Rejas' ||
-    cartItem.TIPO === 'Rejillas' ||
-    cartItem.TIPO === 'Tapas';
+  const KIT = cartItem.KIT;
 
   useEffect(() => {
     const updatedCart = cart.map((item) => {
@@ -33,19 +30,9 @@ const CartLine = ({ cartItem, formatPrices }) => {
       <Td textAlign="center">{formatPrices(cartItem.PRECIO)}</Td>
       <Td textAlign="center" whiteSpace={'nowrap'}>
         <Button
-          isDisabled={
-            isRejasOTapas && cantidad > 10
-              ? false
-              : isRejasOTapas && cantidad <= 10
-              ? true
-              : !isRejasOTapas && cantidad > 20
-              ? false
-              : true
-          }
+          isDisabled={cantidad > KIT ? false : true}
           size={{ base: 'lg', md: 'sm' }}
-          onClick={() =>
-            setcantidad(isRejasOTapas ? cantidad - 10 : cantidad - 20)
-          }
+          onClick={() => setcantidad(cantidad - KIT)}
           variant="outline">
           -
         </Button>
@@ -53,9 +40,7 @@ const CartLine = ({ cartItem, formatPrices }) => {
           {cantidad}
         </Text>
         <Button
-          onClick={() =>
-            setcantidad(isRejasOTapas ? cantidad + 10 : cantidad + 20)
-          }
+          onClick={() => setcantidad(cantidad + KIT)}
           size={{ base: 'lg', md: 'sm' }}
           variant="outline">
           +

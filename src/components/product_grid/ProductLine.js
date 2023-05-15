@@ -35,28 +35,16 @@ const ProductLine = ({ subProd }) => {
       <Td width="15%">{formatPrices(subProd['PRECIO'])}</Td>
       <Td width="20%" whiteSpace={'nowrap'}>
         <Button
-          isDisabled={
-            KIT === 10 && cantidad > 10
-              ? false
-              : KIT === 10 && cantidad <= 10
-              ? true
-              : KIT === 20 && cantidad > 20
-              ? false
-              : true
-          }
+          isDisabled={cantidad > KIT ? false : true}
           size={{ base: 'lg', md: 'sm' }}
-          onClick={() =>
-            setcantidad(KIT === 10 ? cantidad - 10 : cantidad - 20)
-          }>
+          onClick={() => setcantidad(cantidad - KIT)}>
           -
         </Button>
         <Text as={'span'} fontSize={{ base: 'md', md: 'sm' }} m="3">
           {cantidad}
         </Text>
         <Button
-          onClick={() =>
-            setcantidad(KIT === 10 ? cantidad + 10 : cantidad + 20)
-          }
+          onClick={() => setcantidad(cantidad + KIT)}
           size={{ base: 'lg', md: 'sm' }}>
           +
         </Button>
