@@ -44,6 +44,7 @@ import { NavLink } from 'react-router-dom';
 /* ****************************************************************************************** */
 
 export const OpenLoginContext = createContext(null);
+export const arrayQtyTen = createContext(null);
 
 export default function SidebarWithHeader() {
   const { isOpen, onOpen, onClose } = useDisclosure();

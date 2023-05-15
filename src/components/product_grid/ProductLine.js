@@ -8,12 +8,11 @@ import { BiCartDownload } from 'react-icons/bi';
 import { OpenLoginContext } from '../sidebar_with_header/Sidebar_Header';
 
 const ProductLine = ({ subProd }) => {
-  const isRejasOTapas =
-    subProd.TIPO === 'Rejas' ||
-    subProd.TIPO === 'Rejillas' ||
-    subProd.TIPO === 'Tapas';
+  console.log(subProd);
 
-  const [cantidad, setcantidad] = useState(isRejasOTapas ? 10 : 20);
+  const KIT = subProd.KIT;
+
+  const [cantidad, setcantidad] = useState(KIT);
   const cart = useSelector((store) => store.cart);
   const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
@@ -37,17 +36,17 @@ const ProductLine = ({ subProd }) => {
       <Td width="20%" whiteSpace={'nowrap'}>
         <Button
           isDisabled={
-            isRejasOTapas && cantidad > 10
+            KIT === 10 && cantidad > 10
               ? false
-              : isRejasOTapas && cantidad <= 10
+              : KIT === 10 && cantidad <= 10
               ? true
-              : !isRejasOTapas && cantidad > 20
+              : KIT === 20 && cantidad > 20
               ? false
               : true
           }
           size={{ base: 'lg', md: 'sm' }}
           onClick={() =>
-            setcantidad(isRejasOTapas ? cantidad - 10 : cantidad - 20)
+            setcantidad(KIT === 10 ? cantidad - 10 : cantidad - 20)
           }>
           -
         </Button>
@@ -56,7 +55,7 @@ const ProductLine = ({ subProd }) => {
         </Text>
         <Button
           onClick={() =>
-            setcantidad(isRejasOTapas ? cantidad + 10 : cantidad + 20)
+            setcantidad(KIT === 10 ? cantidad + 10 : cantidad + 20)
           }
           size={{ base: 'lg', md: 'sm' }}>
           +
