@@ -9,7 +9,7 @@ import {
   ButtonGroup,
 } from '@chakra-ui/react';
 import { useSelector, useDispatch } from 'react-redux';
-import { createOrder } from '../utils/orders_utils/orderUtils';
+import { createOrder, sendMail } from '../utils/orders_utils/orderUtils';
 import { createOrderToDatabase } from '../firebase/firestore';
 import { resetCartAction } from '../redux/cart/cartActions';
 import { CheckIcon, WarningTwoIcon } from '@chakra-ui/icons';
@@ -58,17 +58,34 @@ const Cart = () => {
 
   const createOrderHandle = () => {
     const newOrder = createOrder(user.uid, cart);
+    const orderDataToMail = {
+      ...newOrder,
+      email: user.email,
+      name: user.nombre,
+    };
     redDispatch({ type: 'loading' });
-    createOrderToDatabase(user.uid, newOrder).then((res) => {
-      if (res.isSuccess) {
-        redDispatch({ type: 'success' });
-        setTimeout(() => {
-          dispatch(resetCartAction());
-          redDispatch({ type: 'reset' });
-          navigate('/orders');
-        }, 1200);
-      }
-    });
+    createOrderToDatabase(user.uid, newOrder)
+      .then((res) => {
+        if (res.isSuccess) {
+          sendMail(orderDataToMail)
+            .then(() =>
+              alert(
+                'Pedido creado con suceso! Recibirás un email con detalles del pedido'
+              )
+            )
+            .catch(() => alert('Ocurrió un error inesperado'));
+          redDispatch({ type: 'success' });
+          setTimeout(() => {
+            dispatch(resetCartAction());
+            redDispatch({ type: 'reset' });
+            navigate('/orders');
+          }, 1200);
+        }
+      })
+      .catch((err) => {
+        alert('Ocurrió un error inesperado. Pruebe más tarde');
+        throw new Error(err);
+      });
   };
   return (
     <VStack spacing="5" paddingY={5}>

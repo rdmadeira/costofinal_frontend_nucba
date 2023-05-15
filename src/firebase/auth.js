@@ -6,6 +6,8 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  /* confirmPasswordReset, */
 } from 'firebase/auth';
 
 const app = initializeApp(firebaseConfig);
@@ -99,3 +101,21 @@ export const upDateDataToDB = async (updatedData) => {
 export const signOut = () => {
   return auth.signOut();
 };
+
+export const resetPassword = async (email) => {
+  sendPasswordResetEmail(auth, email)
+    .then(() => {
+      alert('Link enviado! Entrá en su email para restablecer la contraseña.');
+    })
+    .catch((err) => {
+      if (err.code === 'auth/user-not-found' || err.code === 'INVALID_EMAIL') {
+        alert('User not found, try again!');
+      }
+    });
+};
+
+/* export const confirmThePasswordReset = async (oobCode, newPassword) => {
+  if (!oobCode && !newPassword) return;
+
+  return await confirmPasswordReset(auth, oobCode, newPassword);
+}; */
