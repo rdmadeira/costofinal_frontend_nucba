@@ -8,8 +8,6 @@ import { BiCartDownload } from 'react-icons/bi';
 import { OpenLoginContext } from '../sidebar_with_header/Sidebar_Header';
 
 const ProductLine = ({ subProd }) => {
-  console.log(subProd);
-
   const KIT = subProd.KIT;
 
   const [cantidad, setcantidad] = useState(KIT);

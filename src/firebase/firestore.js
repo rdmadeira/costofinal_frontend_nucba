@@ -45,3 +45,13 @@ export const getOrders = async (userId) => {
 
   return orders;
 };
+
+export const getProductsFromDB = async () => {
+  const products = {};
+  const productsCollection = collection(db, 'products');
+  (await getDocs(productsCollection)).forEach(
+    (doc) => (products[doc.id] = doc.data())
+  );
+  console.log(products);
+  return products;
+};

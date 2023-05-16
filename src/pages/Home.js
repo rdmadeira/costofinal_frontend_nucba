@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Box, VStack, Heading } from '@chakra-ui/react';
+import { Box, VStack, Heading, Spinner } from '@chakra-ui/react';
 import CustomCarousel from '../components/carousel/Carousel';
 import { sendItemsToCarrousel } from '../utils/data_utils/dataUtils';
+import itemsToCarrousel from '../data/itemsToCarrousel.json';
 
 /* import homeUrl from '../assets/plumbing-home.jpg'; */
 
@@ -9,7 +10,9 @@ const Home = () => {
   const [itemsToCarousel, setitemsToCarousel] = useState([]);
 
   useEffect(() => {
-    sendItemsToCarrousel().then((res) => setitemsToCarousel(res));
+    sendItemsToCarrousel(itemsToCarrousel).then((res) =>
+      setitemsToCarousel(res)
+    );
   }, [sendItemsToCarrousel, setitemsToCarousel]);
 
   return (
@@ -26,7 +29,17 @@ const Home = () => {
         <Heading zIndex={'overlay'} alignSelf="center" color={'#424a9d'}>
           Costo Final
         </Heading>
-        <CustomCarousel items={itemsToCarousel} focusOnSelect={true} />
+        {itemsToCarousel.length > 0 ? (
+          <CustomCarousel items={itemsToCarousel} focusOnSelect={true} />
+        ) : (
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />
+        )}
       </VStack>
     </Box>
   );

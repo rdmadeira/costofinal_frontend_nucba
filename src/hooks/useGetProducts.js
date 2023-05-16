@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { getProducts } from '../utils/data_utils/dataUtils';
+import { getProductsFromDB } from '../firebase/firestore';
 
 const useGetProducts = () => {
   const [products, setProducts] = useState(null);
 
   useEffect(() => {
-    getProducts().then((res) => {
+    getProductsFromDB().then((res) => {
       setProducts(res);
     });
   }, [setProducts]);

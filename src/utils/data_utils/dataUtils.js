@@ -1,3 +1,5 @@
+import { getProductsFromDB } from '../../firebase/firestore';
+
 export const getMenuNamesData = async () => {
   const menuNames = await fetch(
     process.env.PUBLIC_URL + '/data/menuProducts.json'
@@ -25,15 +27,24 @@ export const getProducts = async () => {
   return products;
 };
 
-export const sendItemsToCarrousel = async () => {
-  const productosJson = await getProducts();
-  let respuesta = Object.keys(productosJson).map((productoKey) => {
-    return {
-      ...productosJson[productoKey][
-        Object.keys(productosJson[productoKey])[0]
-      ][0],
-      familia: productoKey,
-    };
+export const sendItemsToCarrousel = async (itemsToCarrousel) => {
+  const productosJson = await getProductsFromDB();
+  let allProductsArray = Object.keys(productosJson).flatMap((key) =>
+    Object.keys(productosJson[key]).flatMap((subKey) =>
+      productosJson[key][subKey].flatMap((subSubProd) => ({
+        ...subSubProd,
+        familia: key,
+      }))
+    )
+  );
+  let respuesta = [];
+
+  itemsToCarrousel.forEach((item) => {
+    allProductsArray.forEach((prod) => {
+      if (prod.id === item.id) {
+        respuesta.push({ ...prod, image: item.image });
+      }
+    });
   });
 
   return respuesta;
