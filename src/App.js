@@ -19,7 +19,12 @@ function App() {
 
           dispatch(userActions.setUser(user));
           getOrders(currentUser.uid).then((res) => {
-            dispatch(getOrdersAction(res.items));
+            const ordersToStore = res.items.map((item) => ({
+              ...item,
+              createdAtTS: JSON.stringify(item.createdAtTS),
+            }));
+            console.log('En App.js', ordersToStore);
+            dispatch(getOrdersAction(ordersToStore));
           });
         });
       } else {

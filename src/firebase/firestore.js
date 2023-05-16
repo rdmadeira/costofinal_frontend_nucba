@@ -5,6 +5,9 @@ import {
   doc,
   collection,
   getDocs,
+  serverTimestamp,
+  orderBy,
+  query,
 } from 'firebase/firestore';
 import { firebaseConfig } from './firebaseConfig.js';
 
@@ -14,9 +17,11 @@ const db = getFirestore(app);
 export const createOrderToDatabase = async (userId, newOrder) => {
   const userOrderRef = collection(db, 'orders', userId, userId);
   const ordersRef = doc(userOrderRef, newOrder.id);
+  const createdAtTS = serverTimestamp();
+  const newOrderWithTimestamp = { ...newOrder, createdAtTS };
   let createDocReturn = { isSuccess: null, message: null };
 
-  await setDoc(ordersRef, newOrder)
+  await setDoc(ordersRef, newOrderWithTimestamp)
     .then(() => {
       createDocReturn.isSuccess = true;
     })
@@ -32,9 +37,10 @@ export const getOrders = async (userId) => {
   const userOrderRef = collection(db, 'orders', userId, userId);
   let orders = { isError: null, items: [] };
 
-  await getDocs(userOrderRef)
+  await getDocs(query(userOrderRef, orderBy('createdAtTS', 'desc')))
     .then((querySnapshot) => {
       const docs = querySnapshot.docs.map((query) => query.data());
+      console.log('en getOrders.js', docs);
       orders = { isError: false, items: docs };
       return;
     })
@@ -42,7 +48,6 @@ export const getOrders = async (userId) => {
       orders = { isError: true, items: [], message: err.code };
       return;
     });
-
   return orders;
 };
 

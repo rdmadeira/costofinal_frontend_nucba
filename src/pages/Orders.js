@@ -47,10 +47,15 @@ const Orders = () => {
         isError: res.isError,
         message: res.message || '',
       });
+      const ordersToStore = res.items.map((item) => ({
+        ...item,
+        createdAtTS: JSON.stringify(item.createdAtTS),
+      }));
+      console.log('en Orders.js', ordersToStore);
 
-      dispatch(getOrdersAction(res.items));
+      dispatch(getOrdersAction(ordersToStore));
     });
-  }, [dispatch, getOrders, getOrdersAction]);
+  }, [dispatch, getOrders, getOrdersAction, JSON.stringify]);
 
   return (
     <VStack spacing={5} py={'5'} px={'3'}>
