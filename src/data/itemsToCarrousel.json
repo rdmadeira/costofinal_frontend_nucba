@@ -1,34 +1,42 @@
 [
   {
-    "id": "201d8033-3a05-45b6-aa46-bb26912061f6",
+    "id": "5ef7803b-7c8d-4a39-bc58-891904bdeba4",
+    "codigo": "B3412BR",
     "image": "/assets/caroussel/bronce_agua_buje.jpg"
   },
   {
-    "id": "5e435f1f-92d7-475f-9810-87a6e45fd0af",
+    "id": "f96a3f30-7a78-4381-b04a-64b63ca8ea46",
+    "codigo": "1418",
     "image": "/assets/caroussel/bronce_trafilado_buje_reduccion.jpg"
   },
   {
-    "id": "5f163298-9558-481d-bcf6-4d8469c93916",
+    "id": "188b6740-37b9-4230-b8f4-1fc7802fb92a",
+    "codigo": "HH18",
     "image": "/assets/caroussel/codos_tees_gas_codos_hh.jpg"
   },
   {
-    "id": "6b6e743f-2c99-4d40-8240-65501887669f",
+    "id": "6451940d-eb4c-4ca1-8dc4-fbee1e88e108",
+    "codigo": "CODOE12",
     "image": "/assets/caroussel/polietileno_espiga_doble.jpg"
   },
   {
-    "id": "49a2d68c-439e-40e0-811d-fd86ca3c7e00",
+    "id": "45962b24-3196-4cca-bfab-15cc9cec8b8b",
+    "codigo": "CODOHH12P",
     "image": "/assets/caroussel/polipropileno_codo_90_hh.jpg"
   },
   {
-    "id": "e04c097e-805e-43d8-8768-82159f2e225e",
+    "id": "1b30f2cd-fb08-4179-9719-f2269eea557c",
+    "codigo": "R2042",
     "image": "/assets/caroussel/rejillas_ventilacion_20x40_800.jpg"
   },
   {
-    "id": "bf7308b0-75d8-4094-b0ca-e83ec4c9b7ca",
+    "id": "270cfdbb-37a2-46d4-a56a-cc04a1020bfb",
+    "codigo": "TEURO30",
     "image": "/assets/caroussel/termocuplas_termocupla_sola.jpg"
   },
   {
-    "id": "42d66029-68e3-4ec4-b255-a5b2b9c18ca9",
+    "id": "f6da4561-21d6-4474-bcc1-cedc5c338d63",
+    "codigo": "BUJE2520F",
     "image": "/assets/caroussel/termofusion_buje_reduccion.jpg"
   }
 ]
