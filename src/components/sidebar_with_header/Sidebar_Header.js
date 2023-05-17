@@ -270,7 +270,8 @@ const MobileNav = ({
                   transition="all 0.3s"
                   borderBottom="transparent 1px solid"
                   _focus={{ boxShadow: 'none' }}
-                  _hover={{ borderBottom: 'gray 1px solid' }}>
+                  _hover={{ borderBottom: 'gray 1px solid' }}
+                  zIndex={'500'}>
                   <HStack>
                     <ImUserTie size="25px" />
                     <VStack

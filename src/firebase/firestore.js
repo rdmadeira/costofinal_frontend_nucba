@@ -40,7 +40,7 @@ export const getOrders = async (userId) => {
   await getDocs(query(userOrderRef, orderBy('createdAtTS', 'desc')))
     .then((querySnapshot) => {
       const docs = querySnapshot.docs.map((query) => query.data());
-      console.log('en getOrders.js', docs);
+
       orders = { isError: false, items: docs };
       return;
     })

@@ -26,7 +26,7 @@ const Home = () => {
       paddingY={5}
       minH="88vh">
       <VStack spacing={'8'}>
-        <Heading zIndex={'overlay'} alignSelf="center" color={'#424a9d'}>
+        <Heading alignSelf="center" color={'#424a9d'}>
           Costo Final
         </Heading>
         {itemsToCarousel.length > 0 ? (

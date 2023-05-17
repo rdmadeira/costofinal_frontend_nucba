@@ -23,7 +23,7 @@ function App() {
               ...item,
               createdAtTS: JSON.stringify(item.createdAtTS),
             }));
-            console.log('En App.js', ordersToStore);
+
             dispatch(getOrdersAction(ordersToStore));
           });
         });

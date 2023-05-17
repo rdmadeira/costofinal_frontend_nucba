@@ -51,7 +51,6 @@ const Orders = () => {
         ...item,
         createdAtTS: JSON.stringify(item.createdAtTS),
       }));
-      console.log('en Orders.js', ordersToStore);
 
       dispatch(getOrdersAction(ordersToStore));
     });
