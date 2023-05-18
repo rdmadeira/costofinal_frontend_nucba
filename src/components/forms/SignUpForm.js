@@ -37,7 +37,6 @@ const SignUpForm = ({ onClose, loginState: { isLogin, setisLogin } }) => {
   }, [formState]); */
 
   const onSubmit = (data) => {
-    console.log(data);
     if (!isLogin) {
       return createUser(data).then((res) => {
         if (res.isSuccesful) {

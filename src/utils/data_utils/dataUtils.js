@@ -1,14 +1,15 @@
-import { getProductsFromDB } from '../../firebase/firestore';
+import {
+  getProductsFromDB,
+  getProductsArrayToMenu,
+} from '../../firebase/firestore';
 
 export const getMenuNamesData = async () => {
-  const menuNames = await fetch(
-    process.env.PUBLIC_URL + '/data/menuProducts.json'
-  )
+  const menuNames = await getProductsArrayToMenu()
     .then((response) => {
-      return response.json();
+      return response;
     })
     .then((data) =>
-      Object.keys(data).map((key) => ({
+      data.map((key) => ({
         name: key,
         path: key.replace(/\s+/g, '-').toLowerCase(),
       }))

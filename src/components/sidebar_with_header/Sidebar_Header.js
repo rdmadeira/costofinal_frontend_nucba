@@ -124,6 +124,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
     TfiLayoutGrid3Alt,
     TfiLayoutGrid2,
     TfiLayoutGrid3Alt,
+    TfiLayoutGrid2,
   ];
   useEffect(() => {
     getMenuNamesData().then((data) => {
@@ -148,7 +149,8 @@ const SidebarContent = ({ onClose, ...rest }) => {
         alignItems="center"
         mx="8"
         justifyContent="space-between"
-        marginBlockEnd="10px">
+        /* marginBlockEnd="10px" */
+      >
         <NavLink to="/">
           <Logo width={{ base: '20%', md: '40%' }} />
         </NavLink>
@@ -159,6 +161,8 @@ const SidebarContent = ({ onClose, ...rest }) => {
           <NavItem
             icon={link.icon}
             fontSize={{ base: 'md', md: 'xs' }}
+            /* padding={'3'} */
+            marginX={'0'}
             color="gray.500">
             {link.name}
           </NavItem>

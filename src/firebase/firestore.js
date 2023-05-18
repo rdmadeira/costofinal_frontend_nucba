@@ -57,6 +57,24 @@ export const getProductsFromDB = async () => {
   (await getDocs(productsCollection)).forEach(
     (doc) => (products[doc.id] = doc.data())
   );
-  console.log(products);
+
+  return products;
+};
+
+export const getProductsArrayToMenu = async () => {
+  const products = [];
+  const productsCollection = collection(db, 'products');
+  (await getDocs(productsCollection)).forEach((doc) => {
+    return products.push(doc.id);
+  });
+
+  products.sort(function (a, b) {
+    if (a != 'FERRETERIA' && b == 'FERRETERIA') {
+      return -1;
+    } else {
+      return 0;
+    }
+  });
+
   return products;
 };
