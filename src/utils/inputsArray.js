@@ -3,6 +3,7 @@ export const inputsArray = [
   'apellido',
   'calle',
   'numero',
+  'complemento',
   'localidad',
   'CP',
   'telefono',

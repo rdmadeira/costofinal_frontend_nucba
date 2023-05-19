@@ -40,12 +40,12 @@ export const createUser = async (user) => {
         dirección: {
           calle: user.calle,
           numero: user.numero,
+          complemento: user.complemento,
           localidad: user.localidad,
           CP: user['CP'],
         },
       };
 
-      console.log(newUser);
       setDoc(doc(db, 'users', newUser.uid), newUser);
 
       response.isSuccesful = true;
