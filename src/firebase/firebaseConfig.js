@@ -3,7 +3,7 @@
 // import { getAnalytics } from 'firebase/analytics';
 
 export const firebaseConfig = {
-  apiKey: 'AIzaSyCgh-bcnxPvdlayp5bD1du8wH1ZzK_49bc',
+  apiKey: process.env.REACT_APP_API_KEY,
   authDomain: 'costofinal-b391b.firebaseapp.com',
   projectId: 'costofinal-b391b',
   storageBucket: 'costofinal-b391b.appspot.con',
