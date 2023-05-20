@@ -62,6 +62,8 @@ const Cart = () => {
       ...newOrder,
       email: user.email,
       name: user.nombre,
+      phone: user.phone,
+      address: user['dirección'],
     };
     redDispatch({ type: 'loading' });
     createOrderToDatabase(user.uid, newOrder)
