@@ -62,7 +62,7 @@ const Cart = () => {
       ...newOrder,
       email: user.email,
       name: user.nombre,
-      lastname: user.lastname,
+      lastname: user.apellido,
       phone: user.phone,
       address: user['dirección'],
     };
