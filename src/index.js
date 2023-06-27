@@ -11,6 +11,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import Orders from './pages/Orders';
 import Home from './pages/Home';
 import Account from './pages/Account';
+import UpdatePrice from './pages/UpdatePrice';
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: 'account',
         element: <Account />,
+      },
+      {
+        path: 'update',
+        element: <UpdatePrice />,
       },
     ],
   },

@@ -7,6 +7,7 @@ import * as userActions from './redux/user/userActions';
 import SidebarWithHeader from './components/sidebar_with_header/Sidebar_Header.js';
 import { getOrders } from './firebase/firestore';
 import { getOrdersAction } from './redux/orders/ordersActions';
+
 function App() {
   const dispatch = useDispatch();
 
