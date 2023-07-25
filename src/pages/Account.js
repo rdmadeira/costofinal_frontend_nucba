@@ -115,19 +115,15 @@ const Account = () => {
                       render={({
                         field: {
                           onChange,
-
                           value = user[inputKey] ||
                             user['dirección'][inputKey] ||
                             user['phone'],
-                          name = inputKey,
                         },
                       }) => (
                         <>
                           <Input
-                            {...register(inputKey)}
-                            ref={useRefs.current && useRefs.current[index]}
-                            name={name}
-                            id={name}
+                            /* name={name} */
+                            id={inputKey}
                             type={
                               inputKey === 'contraseña' ||
                               inputKey === 'confirme la contraseña'
@@ -152,6 +148,8 @@ const Account = () => {
                               borderColor: 'transparent',
                               outline: '1px solid gray',
                             }}
+                            {...register(inputKey)} // La funcion register tiene que estar en el final para ejecutar el handleSubmit de React-hook-form
+                            ref={useRefs.current && useRefs.current[index]} // El ref da error se pongo antes del register
                           />
                           {inputKey !== 'email' && (
                             <InputRightElement h="100%">
