@@ -1,7 +1,7 @@
-import React, { useEffect, useState, createContext } from 'react';
+import React, { createContext } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getMenuNamesData } from '../../utils/data_utils/dataUtils.js';
+
 import { CustomIconButton } from './sideBarComponents.js';
 import {
   Modal,
@@ -40,6 +40,8 @@ import Logo from '../ui/Logo.jsx';
 import Main from '../../pages/Main';
 import { signOut } from '../../firebase/auth';
 import { NavLink } from 'react-router-dom';
+import useGetCategories from '../../hooks/useGetCategories';
+// import { useCallback } from 'react';
 
 /* ****************************************************************************************** */
 
@@ -113,7 +115,7 @@ export default function SidebarWithHeader() {
 }
 
 const SidebarContent = ({ onClose, ...rest }) => {
-  const [menuItems, setmenuItems] = useState(null);
+  const { data: categoriesData } = useGetCategories();
 
   const icons = [
     TfiLayoutGrid2,
@@ -126,12 +128,6 @@ const SidebarContent = ({ onClose, ...rest }) => {
     TfiLayoutGrid3Alt,
     TfiLayoutGrid2,
   ];
-  useEffect(() => {
-    getMenuNamesData().then((data) => {
-      icons.forEach((icon, index) => (data[index].icon = icons[index]));
-      setmenuItems(data);
-    });
-  }, [setmenuItems]);
 
   return (
     <Box
@@ -156,15 +152,18 @@ const SidebarContent = ({ onClose, ...rest }) => {
         </NavLink>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
-      {menuItems?.map((link) => (
-        <NavLink to={`products/${link.path}`} key={link.name} onClick={onClose}>
+      {categoriesData?.data?.map((category, index) => (
+        <NavLink
+          to={`products/${category.path}`}
+          key={category.name}
+          onClick={onClose}>
           <NavItem
-            icon={link.icon}
+            icon={icons[index]}
             fontSize={{ base: 'md', md: 'xs' }}
             /* padding={'3'} */
             marginX={'0'}
             color="gray.500">
-            {link.name}
+            {category.name}
           </NavItem>
         </NavLink>
       ))}

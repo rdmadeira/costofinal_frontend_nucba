@@ -8,6 +8,10 @@ import SidebarWithHeader from './components/sidebar_with_header/Sidebar_Header.j
 import { getOrders } from './firebase/firestore';
 import { getOrdersAction } from './redux/orders/ordersActions';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryclient = new QueryClient();
+
 function App() {
   const dispatch = useDispatch();
 
@@ -40,9 +44,11 @@ function App() {
   }, []);
 
   return (
-    <ChakraProvider breakpoints={['xl', ' lg', 'md', 'sm', 'xs']}>
-      <SidebarWithHeader />
-    </ChakraProvider>
+    <QueryClientProvider client={queryclient}>
+      <ChakraProvider breakpoints={['xl', ' lg', 'md', 'sm', 'xs']}>
+        <SidebarWithHeader />
+      </ChakraProvider>
+    </QueryClientProvider>
   );
 }
 
