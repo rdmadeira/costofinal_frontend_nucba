@@ -42,6 +42,7 @@ const Account = () => {
       calle: user.dirección.calle,
       localidad: user.dirección.localidad,
       CP: user.dirección.CP,
+      complemento: user.dirección.complemento || '',
     },
   });
 
@@ -53,6 +54,7 @@ const Account = () => {
       phone: data.telefono,
       dirección: {
         localidad: data.localidad,
+        complemento: data.complemento,
         calle: data.calle,
         numero: data.numero,
         CP: data.CP,
@@ -79,7 +81,7 @@ const Account = () => {
         Mis datos
       </Heading>
       <form
-        onSubmit={handleSubmit(onSubmitHandle)}
+        onSubmit={handleSubmit(onSubmitHandle, (error) => console.log(error))}
         style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
         <Wrap
           direction="row"
@@ -122,7 +124,8 @@ const Account = () => {
                       }) => (
                         <>
                           <Input
-                            /* name={name} */
+                            {...register(inputKey)}
+                            ref={useRefs.current && useRefs.current[index]} // El ref da error se pongo antes del register
                             id={inputKey}
                             type={
                               inputKey === 'contraseña' ||
@@ -132,8 +135,9 @@ const Account = () => {
                                 ? 'tel'
                                 : 'text'
                             }
-                            onChange={onChange}
+                            onChange={onChange} // OnChange y onBlur de register. Tiene que estar después del register.
                             onBlur={() => {
+                              // Custom onBlur
                               useRefs.current[index] &&
                                 useRefs.current[index].current.toggleAttribute(
                                   'disabled'
@@ -148,8 +152,6 @@ const Account = () => {
                               borderColor: 'transparent',
                               outline: '1px solid gray',
                             }}
-                            {...register(inputKey)} // La funcion register tiene que estar en el final para ejecutar el handleSubmit de React-hook-form
-                            ref={useRefs.current && useRefs.current[index]} // El ref da error se pongo antes del register
                           />
                           {inputKey !== 'email' && (
                             <InputRightElement h="100%">
