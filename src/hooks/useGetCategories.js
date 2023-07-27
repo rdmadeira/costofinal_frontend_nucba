@@ -1,8 +1,8 @@
-import CostoAxios from './useAxios';
+import useCostoAxios from './useAxios';
 import { useQuery } from '@tanstack/react-query';
 
 const useGetCategories = () => {
-  const categoriesAxios = CostoAxios();
+  const categoriesAxios = useCostoAxios();
 
   const categoriesQuery = useQuery(
     {
@@ -15,7 +15,7 @@ const useGetCategories = () => {
 
             const changedMenuItems = responseJson.data.map((key) => ({
               name: key.name,
-              path: key.name.replace(/\s+/g, '-').toLowerCase(),
+              path: key.url,
             }));
 
             return changedMenuItems;

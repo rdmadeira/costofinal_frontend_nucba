@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useMemo } from 'react';
 
-const CostoAxios = () => {
+const useCostoAxios = () => {
   const costoAxios = useMemo(() => {
     const costoAxios = axios.create({
       baseURL: process.env.REACT_APP_API_BASE_URL,
@@ -23,4 +23,4 @@ const CostoAxios = () => {
   return costoAxios;
 };
 
-export default CostoAxios;
+export default useCostoAxios;
