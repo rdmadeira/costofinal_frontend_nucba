@@ -16,8 +16,8 @@ import { useParams } from 'react-router-dom';
 import ProductGrid from '../components/product_grid/ProductGrid';
 
 const Products = () => {
-  const { products } = useGetProducts();
   let { product: productType } = useParams();
+  const { data: productsData } = useGetProducts(productType);
   /* productType = productType.toUpperCase().replace(/-/g, ' '); */
   const { data: subCategoriesData } = useGetSubCats(productType);
 
@@ -32,7 +32,7 @@ const Products = () => {
       py={'5'}
       px={'10'}>
       <Heading as="h6" size={'md'} color="#4146a3b5">
-        {products && productType}
+        {productType[0].toUpperCase() + productType.slice(1).replace(/-/g, ' ')}
       </Heading>
       <Divider />
 
@@ -40,19 +40,21 @@ const Products = () => {
         <Accordion allowToggle>
           {subCategoriesData?.data?.map((subCat) => {
             return (
-              <AccordionItem key={subCat}>
+              <AccordionItem key={subCat._id}>
                 <AccordionButton
                   _expanded={{ bg: 'green.400', color: 'white' }}>
                   <Box>{subCat.name}</Box>
                   <AccordionIcon />
                 </AccordionButton>
-                {}
+
                 <AccordionPanel>
                   <VStack>
-                    {/* <ProductGrid
-                      product={products[productType][product]}
+                    <ProductGrid
+                      product={productsData?.filter(
+                        (prod) => prod.SUBCATEGORY === subCat._id
+                      )}
                       productType={productType}
-                    /> */}
+                    />
                   </VStack>
                 </AccordionPanel>
               </AccordionItem>

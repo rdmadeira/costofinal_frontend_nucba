@@ -11,7 +11,7 @@ const useCostoAxios = () => {
     });
 
     costoAxios.interceptors.request.use((config) => {
-      const token = JSON.parse(localStorage.getItem('authCF')) || null;
+      const token = localStorage.getItem('authCF') || null;
 
       config.headers.Authorization = 'Bearer ' + token || null;
 
