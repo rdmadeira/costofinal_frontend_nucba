@@ -54,6 +54,9 @@ const SignUpForm = ({ loginState: { isLogin, setisLogin } }) => {
               status: 'success',
               isClosable: true,
             });
+            setTimeout(() => {
+              location.href = '/';
+            }, 800);
           },
           onError: (error) => {
             console.log('error', error);
@@ -71,6 +74,8 @@ const SignUpForm = ({ loginState: { isLogin, setisLogin } }) => {
           },
         }
       );
+
+      return;
 
       /* return createUser(data).then((res) => {
         if (res.isSuccesful) {
@@ -94,6 +99,36 @@ const SignUpForm = ({ loginState: { isLogin, setisLogin } }) => {
       }); */
     }
 
+    newUser.mutate(
+      { email: data.email, contrasena: data.contraseña },
+      {
+        onSuccess: () => {
+          toast({
+            title: 'Cliente ',
+            description: 'Ingresado con sucesso',
+            status: 'success',
+            isClosable: true,
+          });
+          setTimeout(() => {
+            location.href = '/';
+          }, 1200);
+        },
+        onError: (error) => {
+          console.log('error', error);
+          toast({
+            title: 'Falla al hacer el Login:',
+            description:
+              'Error - ' +
+              error.response?.data?.errors[0].message +
+              ' ' +
+              error.response?.data?.errors[0].field +
+              ' ',
+            status: 'error',
+            isClosable: true,
+          });
+        },
+      }
+    );
     /* return loginUserHandle(data).then((res) => {
       if (res.isSuccesful) {
         setisSuccessRequest(true);

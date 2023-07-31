@@ -21,6 +21,7 @@ const useGetSubCats = (categorypath) => {
 
       return subcategories;
     },
+    staleTime: Infinity,
   });
 
   return subCategoriesQuery;

@@ -4,29 +4,28 @@ import { useQuery } from '@tanstack/react-query';
 const useGetCategories = () => {
   const categoriesAxios = useCostoAxios();
 
-  const categoriesQuery = useQuery(
-    {
-      queryKey: ['categories'],
-      queryFn: async () => {
-        const categories = await categoriesAxios('categories', {
-          responseType: 'json',
-          transformResponse: (res) => {
-            const responseJson = JSON.parse(res);
+  const categoriesQuery = useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => {
+      const categories = await categoriesAxios('categories', {
+        responseType: 'json',
+        transformResponse: (res) => {
+          const responseJson = JSON.parse(res);
 
-            const changedMenuItems = responseJson.data.map((key) => ({
-              name: key.name,
-              path: key.url,
-            }));
+          const changedMenuItems = responseJson.data.map((key) => ({
+            name: key.name,
+            path: key.url,
+          }));
 
-            return changedMenuItems;
-          },
-        });
+          return changedMenuItems;
+        },
+      });
 
-        return categories;
-      },
+      return categories;
     },
-    { refetchOnMount: false }
-  );
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+  });
 
   return categoriesQuery;
 };

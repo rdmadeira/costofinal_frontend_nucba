@@ -12,16 +12,17 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import React, { useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { FiEdit } from 'react-icons/fi';
 import { useForm, Controller } from 'react-hook-form';
 import Input from '../components/forms/Input';
 import { inputsArray } from '../utils/inputsArray';
 import { upDateDataToDB } from '../firebase/auth';
 import { setUser } from '../redux/user/userActions';
+import useGetUser from '../hooks/useGetUser';
 
 const Account = () => {
-  const user = useSelector((store) => store.user);
+  const { data: user } = useGetUser({ complete: true });
   const inputsArrayToRender = inputsArray.filter(
     (item) => item !== 'contraseña' && item !== 'confirme la contraseña'
   );
@@ -34,25 +35,27 @@ const Account = () => {
   const { handleSubmit, register, control } = useForm({
     mode: 'onChange',
     defaultValues: {
-      nombre: user.nombre,
-      apellido: user.apellido,
-      telefono: user.phone,
-      email: user.email,
-      numero: user.dirección.numero,
-      calle: user.dirección.calle,
-      localidad: user.dirección.localidad,
-      CP: user.dirección.CP,
-      complemento: user.dirección.complemento || '',
+      nombre: user?.data?.data?.nombre,
+      apellido: user?.data?.data?.apellido,
+      telefono: user?.data?.data?.phone,
+      email: user?.data?.data?.email,
+      numero: user?.data?.data?.direccion?.numero,
+      calle: user?.data?.data?.direccion?.calle,
+      localidad: user?.data?.data?.direccion?.localidad,
+      CP: user?.data?.data?.direccion?.CP,
+      complemento: user?.data?.data?.direccion?.complemento,
     },
   });
 
   const onSubmitHandle = (data) => {
+    console.log('data', data);
+
     const updatedData = {
       ...user,
       nombre: data.nombre,
       apellido: data.apellido,
       phone: data.telefono,
-      dirección: {
+      direccion: {
         localidad: data.localidad,
         complemento: data.complemento,
         calle: data.calle,
@@ -64,7 +67,7 @@ const Account = () => {
     upDateDataToDB(updatedData).then((res) => {
       if (res.isSuccesful) {
         toast({
-          title: user.displayName,
+          title: user.nombre,
           description: 'Cambios guardados con suceso!',
           status: 'success',
           isClosable: true,
@@ -92,7 +95,7 @@ const Account = () => {
           {inputsArrayToRender.map((inputKey, index) => {
             return (
               <WrapItem
-                key={user.uid + inputKey}
+                key={user?.data?.data._id + inputKey}
                 width={
                   inputKey === 'numero' || inputKey === 'CP'
                     ? 'max(min(20%,250px),130px)'
@@ -117,9 +120,11 @@ const Account = () => {
                       render={({
                         field: {
                           onChange,
-                          value = user[inputKey] ||
-                            user['dirección'][inputKey] ||
-                            user['phone'],
+                          value = user?.data?.data[inputKey] // Notación de corchetes no acepta ?. notación, por eso tuve que hacer eso
+                            ? user?.data?.data[inputKey]
+                            : user?.data?.data['direccion']
+                            ? user?.data?.data['direccion'][inputKey]
+                            : '',
                         },
                       }) => (
                         <>
@@ -145,7 +150,8 @@ const Account = () => {
                             }}
                             value={value}
                             placeholder={
-                              user[inputKey] || user['dirección'][inputKey]
+                              user?.data?.data?.inputKey ||
+                              user?.data?.data?.direccion?.inputKey
                             }
                             disabled
                             _focusVisible={{

@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import React, { createContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -38,9 +38,10 @@ import { RiAccountPinCircleFill } from 'react-icons/ri';
 import { ImUserTie } from 'react-icons/im';
 import Logo from '../ui/Logo.jsx';
 import Main from '../../pages/Main';
-import { signOut } from '../../firebase/auth';
+/* import { signOut } from '../../firebase/auth'; */
 import { NavLink } from 'react-router-dom';
 import useGetCategories from '../../hooks/useGetCategories';
+import useGetUser from '../../hooks/useGetUser.js';
 // import { useCallback } from 'react';
 
 /* ****************************************************************************************** */
@@ -49,6 +50,8 @@ export const OpenLoginContext = createContext(null);
 export const arrayQtyTen = createContext(null);
 
 export default function SidebarWithHeader() {
+  let { data: user, isError } = useGetUser();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isOpenLogin,
@@ -61,7 +64,13 @@ export default function SidebarWithHeader() {
     onClose: signoutOnClose,
   } = useDisclosure();
 
-  const user = useSelector((store) => store.user);
+  /* const user = useSelector((store) => store.user); */
+
+  useEffect(() => {
+    if (isError) {
+      user = null;
+    }
+  }, [isError]);
 
   return (
     <OpenLoginContext.Provider value={onOpenLogin}>
@@ -218,10 +227,13 @@ const MobileNav = ({
   };
   const signOutHandle = () => {
     signoutOnOpen();
-    signOut().then(() => {
+
+    localStorage.removeItem('authCF');
+    setTimeout(() => {
       signoutOnClose();
       navigate('/');
-    });
+      navigate(0);
+    }, 800);
   };
 
   return (
@@ -252,7 +264,7 @@ const MobileNav = ({
       />
 
       <HStack spacing={{ base: '3', md: '6' }}>
-        {user && (
+        {user?.data && (
           <NavLink to="/cart">
             <CustomIconButton
               cartNum={cart && cart.length}
@@ -265,7 +277,7 @@ const MobileNav = ({
         )}
         <Flex alignItems={'center'}>
           <Menu>
-            {user ? (
+            {user?.data ? (
               <>
                 <MenuButton
                   paddingRight={{ base: '0', md: '5' }}
@@ -282,7 +294,7 @@ const MobileNav = ({
                       alignItems="flex-start"
                       spacing="1px"
                       ml="2">
-                      <Text fontSize="sm">{user?.displayName}</Text>
+                      <Text fontSize="sm">{user?.data.data.nombre}</Text>
                       <Text fontSize="xs" color="gray.600">
                         Admin
                       </Text>

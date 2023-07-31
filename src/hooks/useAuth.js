@@ -3,6 +3,13 @@ import { useMutation } from '@tanstack/react-query';
 
 const useAuth = (isLogin) => {
   const authAxios = useCostoAxios();
+  // Interceptors - para localStorage.setItem('auth', token):
+  authAxios.interceptors.response.use((resp) => {
+    const token = resp.data.data.token;
+
+    localStorage.setItem('authCF', token);
+    return resp;
+  });
 
   const mutateAuth = useMutation(
     {
@@ -16,7 +23,6 @@ const useAuth = (isLogin) => {
             ...data,
           }
         );
-        // Interceptors - para localStorage.setItem('auth', token)
 
         return auth;
       },
