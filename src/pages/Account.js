@@ -74,24 +74,12 @@ const Account = () => {
       apellido: data.apellido,
       telefono: data.telefono,
       email: data.email,
-      direccion: {
-        calle: data.calle /* || user?.data.data.direccion.calle */,
-        numero: data.numero /* || user?.data.data.direccion.numero */,
-        localidad: data.localidad /* || user?.data.data.direccion.localidad */,
-        CP: data.CP /* || user?.data.data.direccion.CP */,
-        complemento:
-          data.complemento /* || user?.data.data.direccion.complemento */,
-      },
-      /* nombre: data.nombre,
-      apellido: data.apellido,
-      telefono: data.telefono,
-      direccion: {
-        localidad: data.localidad,
-        complemento: data.complemento,
-        calle: data.calle,
-        numero: data.numero,
-        CP: data.CP,
-      }, */
+      calle: data.calle /* || user?.data.data.direccion.calle */,
+      numero: data.numero /* || user?.data.data.direccion.numero */,
+      localidad: data.localidad /* || user?.data.data.direccion.localidad */,
+      CP: data.CP /* || user?.data.data.direccion.CP */,
+      complemento:
+        data.complemento /* || user?.data.data.direccion.complemento */,
     };
 
     mutate(updatedData, {
