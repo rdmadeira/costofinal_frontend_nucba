@@ -23,8 +23,8 @@ const useGetCategories = () => {
 
       return categories;
     },
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
+
+    staleTime: 1000 * 60,
   });
 
   return categoriesQuery;

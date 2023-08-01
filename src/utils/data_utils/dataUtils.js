@@ -1,4 +1,4 @@
-import { getProductsFromDB } from '../../firebase/firestore';
+/* import { getProductsFromDB } from '../../firebase/firestore'; */
 
 export const getMenuNamesAndAddPath = (menuItems) => {
   const changedMenuItems = menuItems.map((key) => ({
@@ -19,16 +19,10 @@ export const getProducts = async () => {
   return products;
 };
 
-export const sendItemsToCarrousel = async (itemsToCarrousel) => {
-  const productosJson = await getProductsFromDB();
-  let allProductsArray = Object.keys(productosJson).flatMap((key) =>
-    Object.keys(productosJson[key]).flatMap((subKey) =>
-      productosJson[key][subKey].flatMap((subSubProd) => ({
-        ...subSubProd,
-        familia: key,
-      }))
-    )
-  );
+export const sendItemsToCarrousel = async (
+  itemsToCarrousel,
+  allProductsArray
+) => {
   let respuesta = [];
 
   itemsToCarrousel.forEach((item) => {

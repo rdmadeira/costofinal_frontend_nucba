@@ -67,6 +67,8 @@ export default function SidebarWithHeader() {
   /* const user = useSelector((store) => store.user); */
 
   useEffect(() => {
+    console.log('isError', isError);
+
     if (isError) {
       user = null;
     }

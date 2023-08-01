@@ -8,12 +8,15 @@ const useGetProducts = (categoryPath) => {
     queryKey: ['productsByCat', categoryPath],
     queryFn: async () => {
       const productsByCat = await CostoAxios(
-        'products?categoryUrl=' + categoryPath,
+        categoryPath ? 'products?categoryUrl=' + categoryPath : 'products',
         {
           responseType: 'json',
           transformResponse: (res) => {
             const responseJson = JSON.parse(res);
 
+            if (!categoryPath) {
+              return responseJson.data;
+            }
             return responseJson.categoryData.data;
           },
         }
