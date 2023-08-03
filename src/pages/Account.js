@@ -56,11 +56,13 @@ const Account = () => {
           apellido: data.data.apellido || '',
           telefono: data.data.telefono || '',
           email: data.data.email || '',
-          numero: data.data.direccion.numero || '',
-          calle: data.data.direccion.calle || '',
-          localidad: data.data.direccion.localidad || '',
-          CP: data.data.direccion.CP || '',
-          complemento: data.data.direccion.complemento || '',
+          numero: data.data.direccion ? data.data.direccion.numero : '',
+          calle: data.data.direccion ? data.data.direccion.calle : '',
+          localidad: data.data.direccion ? data.data.direccion.localidad : '',
+          CP: data.data.direccion ? data.data.direccion.CP : '',
+          complemento: data.data.direccion
+            ? data.data.direccion.complemento
+            : '',
         }));
     },
   });

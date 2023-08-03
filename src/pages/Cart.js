@@ -15,6 +15,7 @@ import { resetCartAction } from '../redux/cart/cartActions';
 import { CheckIcon, WarningTwoIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import CartTable from '../components/cart/CartTable';
+import useGetUser from '../hooks/useGetUser';
 
 const initialState = {
   isLoading: false,
@@ -51,7 +52,7 @@ const cartReducer = (state, action) => {
 
 const Cart = () => {
   const cart = useSelector((store) => store.cart);
-  const user = useSelector((store) => store.user);
+  const { data: user } = useGetUser({ complete: true });
   const dispatch = useDispatch();
   const [estado, redDispatch] = useReducer(cartReducer, initialState);
   const navigate = useNavigate();

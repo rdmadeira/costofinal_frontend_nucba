@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { getOrders } from '../firebase/firestore';
-import { getOrdersAction } from '../redux/orders/ordersActions';
+import React, { useEffect /* , useState */ } from 'react';
+import /* useSelector,  */ /* useDispatch */ 'react-redux';
+/* import { getOrders } from '../firebase/firestore';
+import { getOrdersAction } from '../redux/orders/ordersActions'; */
+
+import useGetOrders from '../hooks/useGetOrders';
 import ServerError from '../components/serv_error/ServerError';
 
 import {
@@ -33,16 +35,26 @@ import {
 } from 'react-icons/bs';
 
 const Orders = () => {
-  const user = useSelector((store) => store.user);
-  const orders = useSelector((store) => store.orders);
-  const [getOrdersState, setgetOrdersState] = useState({
+  /* const user = useSelector((store) => store.user);
+  const orders = useSelector((store) => store.orders); */
+
+  const {
+    data: orders,
+    isError: isOrdersError,
+    error: ordersError,
+  } = useGetOrders();
+
+  /* console.log('orders', orders);
+  console.log('user', user); */
+
+  /*   const [getOrdersState, setgetOrdersState] = useState({
     isError: null,
     message: null,
   });
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); */
 
   useEffect(() => {
-    getOrders(user.uid).then((res) => {
+    /* getOrders(user.uid).then((res) => {
       setgetOrdersState({
         isError: res.isError,
         message: res.message || '',
@@ -52,9 +64,9 @@ const Orders = () => {
         createdAtTS: JSON.stringify(item.createdAtTS),
       }));
 
-      dispatch(getOrdersAction(ordersToStore));
-    });
-  }, [dispatch, getOrders, getOrdersAction, JSON.stringify]);
+      dispatch(getOrdersAction(ordersToStore)); 
+    }); */
+  }, []);
 
   return (
     <VStack spacing={5} py={'5'} px={'3'}>
@@ -62,13 +74,17 @@ const Orders = () => {
         Mis Pedidos
       </Heading>
 
-      {getOrdersState.isError ? (
-        <ServerError message={getOrdersState.message} />
+      {isOrdersError ? (
+        <ServerError
+          message={ordersError.message || 'Algo inesperado ocurrió'}
+        />
       ) : (
         <>
-          {orders.length < 1 && <Text>Todavía no tenés pedidos.</Text>}
+          {orders?.data?.data?.length < 1 && (
+            <Text>Todavía no tenés pedidos.</Text>
+          )}
           <SimpleGrid spacing={'4'} placeItems="center">
-            {orders.map((order) => {
+            {orders?.data?.data?.map((order) => {
               return (
                 <Card key={order.id} w="80%">
                   <CardHeader>
