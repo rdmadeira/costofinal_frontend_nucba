@@ -8,7 +8,7 @@ const usePostUser = () => {
     // En este caso, tuve que usar el parametro 'options' como variable acá (el segundo item del array de queryKey), para que vuelva a refetchear cuando el parametro es usado!!!!!!!!!!!
     mutationKey: ['order'],
     mutationFn: async (data) => {
-      const order = await userAxios.post(`order`, { ...data });
+      const order = await userAxios.post(`orders`, { ...data });
 
       return order;
     },

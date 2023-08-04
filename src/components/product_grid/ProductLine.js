@@ -19,8 +19,6 @@ const ProductLine = ({ subProd }) => {
   const onOpen = useContext(OpenLoginContext);
 
   const addItemToCartHandle = (subProd, qty) => {
-    console.log('user', user);
-
     if (user?.data?.data) {
       const item = { ...subProd, quantity: qty };
       const updatedCart = addItemToCart(item, cart); // ver pq no actua el nuevo item. Ver el tema cart de redux

@@ -54,6 +54,15 @@ const Orders = () => {
   const dispatch = useDispatch(); */
 
   useEffect(() => {
+    if (isOrdersError) {
+      console.log('ordersError', ordersError);
+      if (
+        ordersError?.response?.status === 400 ||
+        ordersError?.response?.status === 401
+      ) {
+        location.href = '/';
+      }
+    }
     /* getOrders(user.uid).then((res) => {
       setgetOrdersState({
         isError: res.isError,
@@ -66,7 +75,7 @@ const Orders = () => {
 
       dispatch(getOrdersAction(ordersToStore)); 
     }); */
-  }, []);
+  }, [isOrdersError, ordersError]);
 
   return (
     <VStack spacing={5} py={'5'} px={'3'}>
@@ -86,11 +95,11 @@ const Orders = () => {
           <SimpleGrid spacing={'4'} placeItems="center">
             {orders?.data?.data?.map((order) => {
               return (
-                <Card key={order.id} w="80%">
+                <Card key={order._id} w="80%">
                   <CardHeader>
                     <HStack spacing={'4'}>
                       <Box>
-                        {order.status === 'pending' ? (
+                        {order.status.status === 'pending' ? (
                           <Tooltip
                             placement="top-start"
                             hasArrow
@@ -106,7 +115,7 @@ const Orders = () => {
                               />
                             </span>
                           </Tooltip>
-                        ) : order.status === 'proccess' ? (
+                        ) : order.status.status === 'process' ? (
                           <Tooltip
                             placement="top-start"
                             hasArrow
@@ -140,7 +149,7 @@ const Orders = () => {
                           </Tooltip>
                         )}
                       </Box>
-                      <Text>{'Pedido n° ' + order.id.slice(0, 7)}</Text>
+                      <Text>{'Pedido n° ' + order._id.slice(0, 7)}</Text>
                     </HStack>
                   </CardHeader>
                   <CardBody>
@@ -158,13 +167,15 @@ const Orders = () => {
                         <Tbody>
                           {order.items.map((item) => {
                             return (
-                              <Tr key={item.CODIGO + order.id}>
-                                <Td>{item.MEDIDA}</Td>
-                                <Td>{item.CODIGO}</Td>
+                              <Tr key={item.product.CODIGO + order._id}>
+                                <Td>{item.product.MEDIDA}</Td>
+                                <Td>{item.product.CODIGO}</Td>
                                 <Td>{item.quantity}</Td>
-                                <Td>{formatPrices(item.PRECIO)}</Td>
+                                <Td>{formatPrices(item.product.PRECIO)}</Td>
                                 <Td>
-                                  {formatPrices(item.PRECIO * item.quantity)}
+                                  {formatPrices(
+                                    item.product.PRECIO * item.quantity
+                                  )}
                                 </Td>
                               </Tr>
                             );
@@ -180,7 +191,8 @@ const Orders = () => {
                               {formatPrices(
                                 order.items.reduce(
                                   (acc, current) =>
-                                    acc + current.quantity * current.PRECIO,
+                                    acc +
+                                    current.quantity * current.product.PRECIO,
                                   0
                                 )
                               )}
