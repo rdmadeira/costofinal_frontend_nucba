@@ -35,23 +35,11 @@ import {
 } from 'react-icons/bs';
 
 const Orders = () => {
-  /* const user = useSelector((store) => store.user);
-  const orders = useSelector((store) => store.orders); */
-
   const {
     data: orders,
     isError: isOrdersError,
     error: ordersError,
   } = useGetOrders();
-
-  /* console.log('orders', orders);
-  console.log('user', user); */
-
-  /*   const [getOrdersState, setgetOrdersState] = useState({
-    isError: null,
-    message: null,
-  });
-  const dispatch = useDispatch(); */
 
   useEffect(() => {
     if (isOrdersError) {

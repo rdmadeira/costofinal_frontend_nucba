@@ -50,7 +50,7 @@ export const OpenLoginContext = createContext(null);
 export const arrayQtyTen = createContext(null);
 
 export default function SidebarWithHeader() {
-  let { data: user, isError } = useGetUser();
+  let { data: user, isError, error } = useGetUser();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -70,7 +70,9 @@ export default function SidebarWithHeader() {
     console.log('isError', isError);
 
     if (isError) {
-      user = null;
+      if (error?.response?.status === 400 || error?.response?.status === 401) {
+        location.href = '/';
+      }
     }
   }, [isError]);
 

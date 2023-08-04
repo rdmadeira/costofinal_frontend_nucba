@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createOrder, sendMail } from '../utils/orders_utils/orderUtils';
-// import { createOrderToDatabase } from '../firebase/firestore';
+
 import { resetCartAction } from '../redux/cart/cartActions';
 import { CheckIcon, WarningTwoIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
@@ -18,45 +18,12 @@ import CartTable from '../components/cart/CartTable';
 import useGetUser from '../hooks/useGetUser';
 import usePostOrder from '../hooks/usePostOrder';
 
-/* const initialState = {
-  isLoading: false,
-  isSuccessful: false,
-  isError: false,
-}; */
-
-/* const cartReducer = (state, action) => {
-  switch (action.type) {
-    case 'loading':
-      return {
-        isSuccessful: false,
-        isError: false,
-        isLoading: true,
-      };
-    case 'success':
-      return {
-        isSuccessful: true,
-        isLoading: false,
-        isError: false,
-      };
-    case 'error':
-      return {
-        isSuccess: false,
-        isLoading: false,
-        isError: true,
-      };
-    case 'reset':
-      return initialState;
-    default:
-      return state;
-  }
-}; */
-
 const Cart = () => {
   const cart = useSelector((store) => store.cart);
   const { data: user } = useGetUser({ complete: true });
   const { mutate, isLoading, isError, isSuccess } = usePostOrder();
   const dispatch = useDispatch();
-  // const [ redDispatch] = useReducer(cartReducer, initialState);
+
   const navigate = useNavigate();
 
   const createOrderHandle = () => {
