@@ -33,17 +33,17 @@ const Cart = () => {
     const orderDataToMail = {
       ...newOrder,
       email: user?.data?.data.email,
-      name: user?.data?.data.nombre,
-      lastname: user?.data?.data.apellido,
-      phone: user?.data?.data.telefono,
-      address: user?.data?.data.direccion,
+      nombre: user?.data?.data.nombre,
+      apellido: user?.data?.data.apellido,
+      telefono: user?.data?.data.telefono,
+      direccion: user?.data?.data.direccion,
     };
 
     console.log('orderDataToMail', orderDataToMail);
 
     mutate(newOrder, {
       onSuccess: (data) => {
-        sendMail(orderDataToMail)
+        sendMail({ ...orderDataToMail, _id: data.data.data })
           .then(() =>
             alert(
               `Pedido n° ${data.data.data._uid} creado con suceso! Recibirás un email con detalles del pedido`
