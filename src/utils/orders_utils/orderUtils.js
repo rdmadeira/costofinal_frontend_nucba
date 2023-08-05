@@ -9,19 +9,18 @@ export const createOrder = (userId, cart) => {
 export const sendMail = async (bodyData) => {
   const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
-  await fetch(baseUrl + 'mailing', {
+  return fetch(baseUrl + 'mailing', {
     headers: {
       'content-type': 'application/json; charset=UTF-8',
     },
-    method: 'POST',
+    method: 'post',
     body: JSON.stringify(bodyData),
   })
     .then((res) => {
-      console.log(res);
+      return res.json();
     })
+    .then((data) => data)
     .catch((err) => {
       throw new Error(err);
     });
-
-  return;
 };

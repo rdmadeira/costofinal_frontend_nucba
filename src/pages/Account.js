@@ -50,20 +50,37 @@ const Account = () => {
         }
       )
         .then((res) => res.json())
-        .then((data) => ({
-          _id: data.data._id,
-          nombre: data.data.nombre || '',
-          apellido: data.data.apellido || '',
-          telefono: data.data.telefono || '',
-          email: data.data.email || '',
-          numero: data.data.direccion ? data.data.direccion.numero : '',
-          calle: data.data.direccion ? data.data.direccion.calle : '',
-          localidad: data.data.direccion ? data.data.direccion.localidad : '',
-          CP: data.data.direccion ? data.data.direccion.CP : '',
-          complemento: data.data.direccion
-            ? data.data.direccion.complemento
-            : '',
-        }));
+        .then((data) =>
+          data.data
+            ? {
+                _id: data.data._id || '',
+                nombre: data.data.nombre || '',
+                apellido: data.data.apellido || '',
+                telefono: data.data.telefono || '',
+                email: data.data.email || '',
+                numero: data.data.direccion ? data.data.direccion.numero : '',
+                calle: data.data.direccion ? data.data.direccion.calle : '',
+                localidad: data.data.direccion
+                  ? data.data.direccion.localidad
+                  : '',
+                CP: data.data.direccion ? data.data.direccion.CP : '',
+                complemento: data.data.direccion
+                  ? data.data.direccion.complemento
+                  : '',
+              }
+            : {
+                _id: '',
+                nombre: '',
+                apellido: '',
+                telefono: '',
+                email: '',
+                numero: '',
+                calle: '',
+                localidad: '',
+                CP: '',
+                complemento: '',
+              }
+        );
     },
   });
 

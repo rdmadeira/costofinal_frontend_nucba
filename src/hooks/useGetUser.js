@@ -24,13 +24,13 @@ const useGetUser = (options) => {
       return user;
     },
     onError: (error) => {
-      console.log('Error', error);
+      console.log('error', error);
+
       localStorage.removeItem('authCF');
-      /* location.href = '/';  no va por que siempre recarga la pagina*/
     },
 
-    staleTime: 60 * 1000,
-    cacheTime: 5 * 60 * 1000,
+    staleTime: 300 * 1000,
+    cacheTime: 305 * 1000,
   });
 
   return queryUser;

@@ -27,26 +27,27 @@ const Cart = () => {
   const navigate = useNavigate();
 
   const createOrderHandle = () => {
-    console.log('user', user);
-
     const newOrder = createOrder(user?.data?.data._id, cart);
-    const orderDataToMail = {
+    console.log(newOrder);
+    /* const orderDataToMail = {
       ...newOrder,
       email: user?.data?.data.email,
       nombre: user?.data?.data.nombre,
       apellido: user?.data?.data.apellido,
       telefono: user?.data?.data.telefono,
       direccion: user?.data?.data.direccion,
-    };
+    }; */
 
-    console.log('orderDataToMail', orderDataToMail);
+    /* console.log('orderDataToMail', orderDataToMail); */
 
     mutate(newOrder, {
       onSuccess: (data) => {
-        sendMail({ ...orderDataToMail, _id: data.data.data })
+        console.log('data', data.data.data);
+
+        sendMail({ ...data.data.data })
           .then(() =>
             alert(
-              `Pedido n° ${data.data.data._uid} creado con suceso! Recibirás un email con detalles del pedido`
+              `Pedido n° ${data.data.data._id} creado con suceso! Recibirás un email con detalles del pedido`
             )
           )
           .catch(() => alert('Ocurrió un error inesperado'));

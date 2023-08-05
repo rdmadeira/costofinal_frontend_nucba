@@ -50,7 +50,7 @@ export const OpenLoginContext = createContext(null);
 export const arrayQtyTen = createContext(null);
 
 export default function SidebarWithHeader() {
-  let { data: user, isError, error } = useGetUser();
+  let { data: user, isError, error, isFetching, isRefetching } = useGetUser();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -70,8 +70,8 @@ export default function SidebarWithHeader() {
     console.log('isError', isError);
 
     if (isError) {
-      if (error?.response?.status === 400 || error?.response?.status === 401) {
-        location.href = '/';
+      if (error?.response?.status === 401) {
+        onOpenLogin();
       }
     }
   }, [isError]);
@@ -120,7 +120,22 @@ export default function SidebarWithHeader() {
           user={user}
         />
         <Box ml={{ base: 0, md: 52 }} p="0">
-          <Main isOpen={isOpenLogin} onClose={onCloseLogin} />
+          {isFetching || isRefetching ? (
+            <VStack mt={'10'}>
+              <Text color={'blue'}>
+                Sesión vencida... Aguarde un momento...
+              </Text>
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+              />
+            </VStack>
+          ) : (
+            <Main isOpen={isOpenLogin} onClose={onCloseLogin} />
+          )}
         </Box>
       </Box>
     </OpenLoginContext.Provider>
@@ -281,7 +296,7 @@ const MobileNav = ({
         )}
         <Flex alignItems={'center'}>
           <Menu>
-            {user?.data ? (
+            {user?.data.data ? (
               <>
                 <MenuButton
                   paddingRight={{ base: '0', md: '5' }}

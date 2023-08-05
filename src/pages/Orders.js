@@ -1,10 +1,12 @@
-import React, { useEffect /* , useState */ } from 'react';
-import /* useSelector,  */ /* useDispatch */ 'react-redux';
+import React, { useEffect, useContext /* , useState */ } from 'react';
+
+import { OpenLoginContext } from '../components/sidebar_with_header/Sidebar_Header';
+import { Spinner } from '@chakra-ui/react';
 /* import { getOrders } from '../firebase/firestore';
 import { getOrdersAction } from '../redux/orders/ordersActions'; */
 
 import useGetOrders from '../hooks/useGetOrders';
-import ServerError from '../components/serv_error/ServerError';
+/* import ServerError from '../components/serv_error/ServerError'; */
 
 import {
   VStack,
@@ -35,34 +37,21 @@ import {
 } from 'react-icons/bs';
 
 const Orders = () => {
+  const onOpenLogin = useContext(OpenLoginContext);
   const {
     data: orders,
     isError: isOrdersError,
     error: ordersError,
+    isFetching,
+    isRefetching,
   } = useGetOrders();
 
   useEffect(() => {
     if (isOrdersError) {
-      console.log('ordersError', ordersError);
-      if (
-        ordersError?.response?.status === 400 ||
-        ordersError?.response?.status === 401
-      ) {
-        location.href = '/';
+      if (ordersError?.response?.status === 401) {
+        onOpenLogin();
       }
     }
-    /* getOrders(user.uid).then((res) => {
-      setgetOrdersState({
-        isError: res.isError,
-        message: res.message || '',
-      });
-      const ordersToStore = res.items.map((item) => ({
-        ...item,
-        createdAtTS: JSON.stringify(item.createdAtTS),
-      }));
-
-      dispatch(getOrdersAction(ordersToStore)); 
-    }); */
   }, [isOrdersError, ordersError]);
 
   return (
@@ -71,10 +60,17 @@ const Orders = () => {
         Mis Pedidos
       </Heading>
 
-      {isOrdersError ? (
-        <ServerError
-          message={ordersError.message || 'Algo inesperado ocurrió'}
-        />
+      {isFetching || isRefetching ? (
+        <VStack mt={'10'}>
+          <Text color={'blue'}>Aguarde un momento...</Text>
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />
+        </VStack>
       ) : (
         <>
           {orders?.data?.data?.length < 1 && (
