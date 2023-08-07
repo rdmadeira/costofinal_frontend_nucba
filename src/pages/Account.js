@@ -41,7 +41,7 @@ const Account = () => {
       const token = localStorage.getItem('authCF');
 
       return await fetch(
-        `http://localhost:8001/api/v1/users?token=${token}&complete=true`,
+        `${process.env.REACT_APP_API_BASE_URL}users?token=${token}&complete=true`,
         {
           headers: {
             'Content-type': 'application/json',
