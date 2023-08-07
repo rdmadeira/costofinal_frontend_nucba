@@ -4,7 +4,7 @@ import { MdRunningWithErrors } from 'react-icons/md';
 import { BsClockHistory } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 
-const ServerError = ({ message }) => {
+const NotAuthorizedError = ({ message }) => {
   const navigate = useNavigate();
   const reload = () => {
     navigate(0);
@@ -14,14 +14,15 @@ const ServerError = ({ message }) => {
       <VStack spacing="3">
         <MdRunningWithErrors color="red" size="40px" />
 
-        <Heading size={'sm'}>Hubo un error inesperado</Heading>
+        <Heading size={'sm'}>Acceso Denegado</Heading>
         <Center>
-          <Text size={'lg'}>500</Text>
-          <Text>El servidor respondió con el error {message}</Text>
+          <Text size={'lg'}>Codigo: 401 - </Text>
+
+          <Text>No hay suficiente permisos: {message}</Text>
         </Center>
         <BsClockHistory />
         <Center>
-          <Text>Recargá la página o intente más tarde</Text>
+          <Text>Entre con la authenticación permitida por la página.</Text>
         </Center>
         <Center>
           <Button onClick={reload} variant="outline" colorScheme="green">
@@ -33,4 +34,4 @@ const ServerError = ({ message }) => {
   );
 };
 
-export default ServerError;
+export default NotAuthorizedError;

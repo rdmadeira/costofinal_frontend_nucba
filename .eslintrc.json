@@ -7,11 +7,14 @@
     "plugin:react/recommended",
     "plugin:jsx-a11y/recommended",
     "prettier",
+    "plugin:@tanstack/eslint-plugin-query/recommended",
     //"react-app",
     "plugin:prettier/recommended"
   ],
-  "plugins": ["react", "import", "jsx-a11y"],
+  "plugins": ["react", "import", "jsx-a11y", "@tanstack/query"],
   "rules": {
+    "@tanstack/query/exhaustive-deps": "error",
+    "@tanstack/query/prefer-query-object-syntax": "error",
     "react/prop-types": 0,
     "no-console": 1, // Salta warnings para los console.log no iren a producción
     "prettier/prettier": [

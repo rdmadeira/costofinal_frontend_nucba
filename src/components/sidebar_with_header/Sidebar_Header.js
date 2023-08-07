@@ -1,7 +1,7 @@
-import React, { useEffect, useState, createContext } from 'react';
+import React, { createContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getMenuNamesData } from '../../utils/data_utils/dataUtils.js';
+
 import { CustomIconButton } from './sideBarComponents.js';
 import {
   Modal,
@@ -38,8 +38,11 @@ import { RiAccountPinCircleFill } from 'react-icons/ri';
 import { ImUserTie } from 'react-icons/im';
 import Logo from '../ui/Logo.jsx';
 import Main from '../../pages/Main';
-import { signOut } from '../../firebase/auth';
+/* import { signOut } from '../../firebase/auth'; */
 import { NavLink } from 'react-router-dom';
+import useGetCategories from '../../hooks/useGetCategories';
+import useGetUser from '../../hooks/useGetUser.js';
+// import { useCallback } from 'react';
 
 /* ****************************************************************************************** */
 
@@ -47,6 +50,8 @@ export const OpenLoginContext = createContext(null);
 export const arrayQtyTen = createContext(null);
 
 export default function SidebarWithHeader() {
+  let { data: user, isError, error, isFetching, isRefetching } = useGetUser();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isOpenLogin,
@@ -59,7 +64,17 @@ export default function SidebarWithHeader() {
     onClose: signoutOnClose,
   } = useDisclosure();
 
-  const user = useSelector((store) => store.user);
+  /* const user = useSelector((store) => store.user); */
+
+  useEffect(() => {
+    console.log('isError', isError);
+
+    if (isError) {
+      if (error?.response?.status === 401) {
+        onOpenLogin();
+      }
+    }
+  }, [isError]);
 
   return (
     <OpenLoginContext.Provider value={onOpenLogin}>
@@ -105,7 +120,22 @@ export default function SidebarWithHeader() {
           user={user}
         />
         <Box ml={{ base: 0, md: 52 }} p="0">
-          <Main isOpen={isOpenLogin} onClose={onCloseLogin} />
+          {isFetching || isRefetching ? (
+            <VStack mt={'10'}>
+              <Text color={'blue'}>
+                Sesión vencida... Aguarde un momento...
+              </Text>
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+              />
+            </VStack>
+          ) : (
+            <Main isOpen={isOpenLogin} onClose={onCloseLogin} />
+          )}
         </Box>
       </Box>
     </OpenLoginContext.Provider>
@@ -113,7 +143,7 @@ export default function SidebarWithHeader() {
 }
 
 const SidebarContent = ({ onClose, ...rest }) => {
-  const [menuItems, setmenuItems] = useState(null);
+  const { data: categoriesData } = useGetCategories();
 
   const icons = [
     TfiLayoutGrid2,
@@ -126,12 +156,6 @@ const SidebarContent = ({ onClose, ...rest }) => {
     TfiLayoutGrid3Alt,
     TfiLayoutGrid2,
   ];
-  useEffect(() => {
-    getMenuNamesData().then((data) => {
-      icons.forEach((icon, index) => (data[index].icon = icons[index]));
-      setmenuItems(data);
-    });
-  }, [setmenuItems]);
 
   return (
     <Box
@@ -156,15 +180,18 @@ const SidebarContent = ({ onClose, ...rest }) => {
         </NavLink>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
-      {menuItems?.map((link) => (
-        <NavLink to={`products/${link.path}`} key={link.name} onClick={onClose}>
+      {categoriesData?.data?.map((category, index) => (
+        <NavLink
+          to={`products/${category.path}`}
+          key={category.name}
+          onClick={onClose}>
           <NavItem
-            icon={link.icon}
+            icon={icons[index]}
             fontSize={{ base: 'md', md: 'xs' }}
             /* padding={'3'} */
             marginX={'0'}
             color="gray.500">
-            {link.name}
+            {category.name}
           </NavItem>
         </NavLink>
       ))}
@@ -219,10 +246,13 @@ const MobileNav = ({
   };
   const signOutHandle = () => {
     signoutOnOpen();
-    signOut().then(() => {
+
+    localStorage.removeItem('authCF');
+    setTimeout(() => {
       signoutOnClose();
       navigate('/');
-    });
+      navigate(0);
+    }, 800);
   };
 
   return (
@@ -253,7 +283,7 @@ const MobileNav = ({
       />
 
       <HStack spacing={{ base: '3', md: '6' }}>
-        {user && (
+        {user?.data && (
           <NavLink to="/cart">
             <CustomIconButton
               cartNum={cart && cart.length}
@@ -266,7 +296,7 @@ const MobileNav = ({
         )}
         <Flex alignItems={'center'}>
           <Menu>
-            {user ? (
+            {user?.data.data ? (
               <>
                 <MenuButton
                   paddingRight={{ base: '0', md: '5' }}
@@ -283,7 +313,7 @@ const MobileNav = ({
                       alignItems="flex-start"
                       spacing="1px"
                       ml="2">
-                      <Text fontSize="sm">{user?.displayName}</Text>
+                      <Text fontSize="sm">{user?.data.data.nombre}</Text>
                       <Text fontSize="xs" color="gray.600">
                         Admin
                       </Text>
@@ -313,6 +343,11 @@ const MobileNav = ({
                   <MenuItem onClick={() => navigateHandle('/orders')}>
                     Mis Ordenes
                   </MenuItem>
+                  {user && user.uid === 'UxvS5mtoEwYVUVIL2btZgVIOZsn1' && (
+                    <MenuItem onClick={() => navigateHandle('/update')}>
+                      Update Prices
+                    </MenuItem>
+                  )}
                   <MenuDivider />
                   <MenuItem onClick={signOutHandle}>Cerrar sesión</MenuItem>
                 </MenuList>

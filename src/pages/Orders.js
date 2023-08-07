@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { getOrders } from '../firebase/firestore';
-import { getOrdersAction } from '../redux/orders/ordersActions';
-import ServerError from '../components/serv_error/ServerError';
+import React, { useEffect, useContext /* , useState */ } from 'react';
+
+import { OpenLoginContext } from '../components/sidebar_with_header/Sidebar_Header';
+import { Spinner } from '@chakra-ui/react';
+/* import { getOrders } from '../firebase/firestore';
+import { getOrdersAction } from '../redux/orders/ordersActions'; */
+
+import useGetOrders from '../hooks/useGetOrders';
+/* import ServerError from '../components/serv_error/ServerError'; */
 
 import {
   VStack,
@@ -33,28 +37,22 @@ import {
 } from 'react-icons/bs';
 
 const Orders = () => {
-  const user = useSelector((store) => store.user);
-  const orders = useSelector((store) => store.orders);
-  const [getOrdersState, setgetOrdersState] = useState({
-    isError: null,
-    message: null,
-  });
-  const dispatch = useDispatch();
+  const onOpenLogin = useContext(OpenLoginContext);
+  const {
+    data: orders,
+    isError: isOrdersError,
+    error: ordersError,
+    isFetching,
+    isRefetching,
+  } = useGetOrders();
 
   useEffect(() => {
-    getOrders(user.uid).then((res) => {
-      setgetOrdersState({
-        isError: res.isError,
-        message: res.message || '',
-      });
-      const ordersToStore = res.items.map((item) => ({
-        ...item,
-        createdAtTS: JSON.stringify(item.createdAtTS),
-      }));
-
-      dispatch(getOrdersAction(ordersToStore));
-    });
-  }, [dispatch, getOrders, getOrdersAction, JSON.stringify]);
+    if (isOrdersError) {
+      if (ordersError?.response?.status === 401) {
+        onOpenLogin();
+      }
+    }
+  }, [isOrdersError, ordersError]);
 
   return (
     <VStack spacing={5} py={'5'} px={'3'}>
@@ -62,19 +60,30 @@ const Orders = () => {
         Mis Pedidos
       </Heading>
 
-      {getOrdersState.isError ? (
-        <ServerError message={getOrdersState.message} />
+      {isFetching || isRefetching ? (
+        <VStack mt={'10'}>
+          <Text color={'blue'}>Aguarde un momento...</Text>
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />
+        </VStack>
       ) : (
         <>
-          {orders.length < 1 && <Text>Todavía no tenés pedidos.</Text>}
+          {orders?.data?.data?.length < 1 && (
+            <Text>Todavía no tenés pedidos.</Text>
+          )}
           <SimpleGrid spacing={'4'} placeItems="center">
-            {orders.map((order) => {
+            {orders?.data?.data?.map((order) => {
               return (
-                <Card key={order.id} w="80%">
+                <Card key={order._id} w="80%">
                   <CardHeader>
                     <HStack spacing={'4'}>
                       <Box>
-                        {order.status === 'pending' ? (
+                        {order.status.status === 'pending' ? (
                           <Tooltip
                             placement="top-start"
                             hasArrow
@@ -90,7 +99,7 @@ const Orders = () => {
                               />
                             </span>
                           </Tooltip>
-                        ) : order.status === 'proccess' ? (
+                        ) : order.status.status === 'process' ? (
                           <Tooltip
                             placement="top-start"
                             hasArrow
@@ -124,7 +133,7 @@ const Orders = () => {
                           </Tooltip>
                         )}
                       </Box>
-                      <Text>{'Pedido n° ' + order.id.slice(0, 7)}</Text>
+                      <Text>{'Pedido n° ' + order._id.slice(0, 7)}</Text>
                     </HStack>
                   </CardHeader>
                   <CardBody>
@@ -142,13 +151,15 @@ const Orders = () => {
                         <Tbody>
                           {order.items.map((item) => {
                             return (
-                              <Tr key={item.CODIGO + order.id}>
-                                <Td>{item.MEDIDA}</Td>
-                                <Td>{item.CODIGO}</Td>
+                              <Tr key={item.product.CODIGO + order._id}>
+                                <Td>{item.product.MEDIDA}</Td>
+                                <Td>{item.product.CODIGO}</Td>
                                 <Td>{item.quantity}</Td>
-                                <Td>{formatPrices(item.PRECIO)}</Td>
+                                <Td>{formatPrices(item.product.PRECIO)}</Td>
                                 <Td>
-                                  {formatPrices(item.PRECIO * item.quantity)}
+                                  {formatPrices(
+                                    item.product.PRECIO * item.quantity
+                                  )}
                                 </Td>
                               </Tr>
                             );
@@ -164,7 +175,8 @@ const Orders = () => {
                               {formatPrices(
                                 order.items.reduce(
                                   (acc, current) =>
-                                    acc + current.quantity * current.PRECIO,
+                                    acc +
+                                    current.quantity * current.product.PRECIO,
                                   0
                                 )
                               )}

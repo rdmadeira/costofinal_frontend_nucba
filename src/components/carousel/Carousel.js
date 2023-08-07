@@ -73,7 +73,7 @@ const CustomCarousel = ({ items }) => {
       {items &&
         items.map((item) => {
           return (
-            <Box key={item.id} h="100%">
+            <Box key={item._id} h="100%">
               <Card
                 h={'100%'}
                 size={{ base: 'md', sm: 'sm' }}

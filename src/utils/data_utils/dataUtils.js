@@ -1,21 +1,12 @@
-import {
-  getProductsFromDB,
-  getProductsArrayToMenu,
-} from '../../firebase/firestore';
+/* import { getProductsFromDB } from '../../firebase/firestore'; */
 
-export const getMenuNamesData = async () => {
-  const menuNames = await getProductsArrayToMenu()
-    .then((response) => {
-      return response;
-    })
-    .then((data) =>
-      data.map((key) => ({
-        name: key,
-        path: key.replace(/\s+/g, '-').toLowerCase(),
-      }))
-    )
-    .catch((err) => console.log(err));
-  return menuNames;
+export const getMenuNamesAndAddPath = (menuItems) => {
+  const changedMenuItems = menuItems.map((key) => ({
+    name: key.name,
+    path: key.name.replace(/\s+/g, '-').toLowerCase(),
+  }));
+
+  return changedMenuItems;
 };
 
 export const getProducts = async () => {
@@ -28,16 +19,10 @@ export const getProducts = async () => {
   return products;
 };
 
-export const sendItemsToCarrousel = async (itemsToCarrousel) => {
-  const productosJson = await getProductsFromDB();
-  let allProductsArray = Object.keys(productosJson).flatMap((key) =>
-    Object.keys(productosJson[key]).flatMap((subKey) =>
-      productosJson[key][subKey].flatMap((subSubProd) => ({
-        ...subSubProd,
-        familia: key,
-      }))
-    )
-  );
+export const sendItemsToCarrousel = async (
+  itemsToCarrousel,
+  allProductsArray
+) => {
   let respuesta = [];
 
   itemsToCarrousel.forEach((item) => {

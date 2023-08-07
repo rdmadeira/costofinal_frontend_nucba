@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 import {
   TableContainer,
   Heading,
@@ -10,64 +10,58 @@ import {
 } from '@chakra-ui/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createOrder, sendMail } from '../utils/orders_utils/orderUtils';
-import { createOrderToDatabase } from '../firebase/firestore';
+
 import { resetCartAction } from '../redux/cart/cartActions';
 import { CheckIcon, WarningTwoIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import CartTable from '../components/cart/CartTable';
-
-const initialState = {
-  isLoading: false,
-  isSuccessful: false,
-  isError: false,
-};
-
-const cartReducer = (state, action) => {
-  switch (action.type) {
-    case 'loading':
-      return {
-        isSuccessful: false,
-        isError: false,
-        isLoading: true,
-      };
-    case 'success':
-      return {
-        isSuccessful: true,
-        isLoading: false,
-        isError: false,
-      };
-    case 'error':
-      return {
-        isSuccess: false,
-        isLoading: false,
-        isError: true,
-      };
-    case 'reset':
-      return initialState;
-    default:
-      return state;
-  }
-};
+import useGetUser from '../hooks/useGetUser';
+import usePostOrder from '../hooks/usePostOrder';
 
 const Cart = () => {
   const cart = useSelector((store) => store.cart);
-  const user = useSelector((store) => store.user);
+  const { data: user } = useGetUser({ complete: true });
+  const { mutate, isLoading, isError, isSuccess } = usePostOrder();
   const dispatch = useDispatch();
-  const [estado, redDispatch] = useReducer(cartReducer, initialState);
+
   const navigate = useNavigate();
 
   const createOrderHandle = () => {
-    const newOrder = createOrder(user.uid, cart);
-    const orderDataToMail = {
+    const newOrder = createOrder(user?.data?.data._id, cart);
+    console.log(newOrder);
+    /* const orderDataToMail = {
       ...newOrder,
-      email: user.email,
-      name: user.nombre,
-      lastname: user.apellido,
-      phone: user.phone,
-      address: user['dirección'],
-    };
-    redDispatch({ type: 'loading' });
-    createOrderToDatabase(user.uid, newOrder)
+      email: user?.data?.data.email,
+      nombre: user?.data?.data.nombre,
+      apellido: user?.data?.data.apellido,
+      telefono: user?.data?.data.telefono,
+      direccion: user?.data?.data.direccion,
+    }; */
+
+    /* console.log('orderDataToMail', orderDataToMail); */
+
+    mutate(newOrder, {
+      onSuccess: (data) => {
+        console.log('data', data.data.data);
+
+        sendMail({ ...data.data.data })
+          .then(() =>
+            alert(
+              `Pedido n° ${data.data.data._id} creado con suceso! Recibirás un email con detalles del pedido`
+            )
+          )
+          .catch(() => alert('Ocurrió un error inesperado'));
+
+        setTimeout(() => {
+          dispatch(resetCartAction());
+
+          navigate('/orders');
+        }, 1200);
+      },
+    });
+
+    /* redDispatch({ type: 'loading' }); */
+    /* createOrderToDatabase(user.uid, newOrder)
       .then((res) => {
         if (res.isSuccess) {
           sendMail(orderDataToMail)
@@ -88,7 +82,7 @@ const Cart = () => {
       .catch((err) => {
         alert('Ocurrió un error inesperado. Pruebe más tarde');
         throw new Error(err);
-      });
+      }); */
   };
   return (
     <VStack spacing="5" paddingY={5}>
@@ -105,18 +99,18 @@ const Cart = () => {
             float={'right'}
             mr="10px">
             <Button
-              isDisabled={estado.isLoading || estado.isSuccessful}
+              isDisabled={isLoading || isSuccess}
               rightIcon={
-                estado.isLoading ? (
+                isLoading ? (
                   <Spinner />
-                ) : estado.isSuccessful ? (
+                ) : isSuccess ? (
                   <CheckIcon />
-                ) : estado.isError ? (
+                ) : isError ? (
                   <WarningTwoIcon />
                 ) : null
               }
-              variant={estado.isSuccessful ? 'solid' : 'outline'}
-              colorScheme="green"
+              variant={isSuccess ? 'solid' : 'outline'}
+              colorScheme={isError ? 'red' : 'green'}
               float="right"
               onClick={() => dispatch(resetCartAction())}
               mt={4}
@@ -124,18 +118,18 @@ const Cart = () => {
               Limpiar carrito
             </Button>
             <Button
-              isDisabled={estado.isLoading || estado.isSuccessful}
+              isDisabled={isLoading || isSuccess}
               rightIcon={
-                estado.isLoading ? (
+                isLoading ? (
                   <Spinner />
-                ) : estado.isSuccessful ? (
+                ) : isSuccess ? (
                   <CheckIcon />
-                ) : estado.isError ? (
+                ) : isError ? (
                   <WarningTwoIcon />
                 ) : null
               }
-              variant={estado.isSuccessful ? 'solid' : 'outline'}
-              colorScheme="green"
+              variant={isSuccess ? 'solid' : 'outline'}
+              colorScheme={isError ? 'red' : 'green'}
               float="right"
               onClick={createOrderHandle}
               mt={4}

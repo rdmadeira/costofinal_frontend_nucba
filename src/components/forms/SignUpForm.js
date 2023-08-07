@@ -15,14 +15,12 @@ import { Controller, useForm } from 'react-hook-form';
 import Input from './Input';
 import { BsCheck } from 'react-icons/bs';
 import { RxCross2 } from 'react-icons/rx';
-import {
-  createUser,
-  loginUserHandle,
-  resetPassword,
-} from '../../firebase/auth';
+
+import useAuth from '../../hooks/useAuth';
+
 import { inputsArray } from '../../utils/inputsArray';
 
-const SignUpForm = ({ onClose, loginState: { isLogin, setisLogin } }) => {
+const SignUpForm = ({ loginState: { isLogin, setisLogin } }) => {
   const { register, handleSubmit, control, formState, getValues, setError } =
     useForm({
       mode: 'onSubmit',
@@ -31,14 +29,51 @@ const SignUpForm = ({ onClose, loginState: { isLogin, setisLogin } }) => {
 
   const [isSuccessRequest, setisSuccessRequest] = useState(null);
   const toast = useToast();
+  const newUser = useAuth(isLogin);
 
   /*  useEffect(() => {
     console.log(formState.isSubmitting, formState.isSubmitSuccessful);
   }, [formState]); */
 
   const onSubmit = (data) => {
+    console.log('data en SignUpForm', data);
+
     if (!isLogin) {
-      return createUser(data).then((res) => {
+      newUser.mutate(
+        { ...data, contrasena: data.contraseña },
+        {
+          onSuccess: (resp) => {
+            localStorage.setItem('authCF', resp.data.data.token);
+            toast({
+              title: 'Cliente ',
+              description: 'Creado con sucesso',
+              status: 'success',
+              isClosable: true,
+            });
+            setTimeout(() => {
+              location.href = '/';
+            }, 800);
+          },
+          onError: (error) => {
+            console.log('error', error);
+            toast({
+              title: 'Falla al crear Usuario:',
+              description:
+                'Error - ' +
+                error.response?.data?.errors[0].message +
+                ' ' +
+                error.response?.data?.errors[0].field +
+                ' ',
+              status: 'error',
+              isClosable: true,
+            });
+          },
+        }
+      );
+
+      return;
+
+      /* return createUser(data).then((res) => {
         if (res.isSuccesful) {
           setisSuccessRequest(true);
           toast({
@@ -57,29 +92,39 @@ const SignUpForm = ({ onClose, loginState: { isLogin, setisLogin } }) => {
             isClosable: true,
           });
         }
-      });
+      }); */
     }
 
-    return loginUserHandle(data).then((res) => {
-      if (res.isSuccesful) {
-        setisSuccessRequest(true);
-        toast({
-          title: 'Login:',
-          description: res.message,
-          status: 'success',
-          isClosable: true,
-        });
-        setTimeout(() => onClose(), 1000);
-      } else {
-        setisSuccessRequest(false);
-        toast({
-          title: 'Login:',
-          description: res.message,
-          status: 'error',
-          isClosable: true,
-        });
+    newUser.mutate(
+      { email: data.email, contrasena: data.contraseña },
+      {
+        onSuccess: () => {
+          toast({
+            title: 'Cliente ',
+            description: 'Ingresado con sucesso',
+            status: 'success',
+            isClosable: true,
+          });
+          setTimeout(() => {
+            location.href = '/';
+          }, 1200);
+        },
+        onError: (error) => {
+          console.log('error', error);
+          toast({
+            title: 'Falla al hacer el Login:',
+            description:
+              'Error - ' +
+              error.response?.data?.errors[0].message +
+              ' ' +
+              error.response?.data?.errors[0].field +
+              ' ',
+            status: 'error',
+            isClosable: true,
+          });
+        },
       }
-    });
+    );
   };
 
   const inputNames = isLogin ? ['email', 'contraseña'] : inputsArray;
@@ -90,7 +135,8 @@ const SignUpForm = ({ onClose, loginState: { isLogin, setisLogin } }) => {
       setError('email', { type: 'required' });
       alert('Por favor, escriba su email!');
     } else {
-      resetPassword(email);
+      // resetPassword(email);
+      console.log('reset password');
     }
   };
 
