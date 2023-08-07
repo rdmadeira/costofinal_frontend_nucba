@@ -29,8 +29,8 @@ const useGetUser = (options) => {
       localStorage.removeItem('authCF');
     },
 
-    staleTime: 300 * 1000,
-    cacheTime: 305 * 1000,
+    staleTime: 60 * 60 * 1000,
+    cacheTime: 60 * 60 * 1000 + 10 * 60 * 1000,
   });
 
   return queryUser;

@@ -17,11 +17,7 @@ import { BsCheck } from 'react-icons/bs';
 import { RxCross2 } from 'react-icons/rx';
 
 import useAuth from '../../hooks/useAuth';
-import {
-  /* createUser,
-  loginUserHandle, */
-  resetPassword,
-} from '../../firebase/auth';
+
 import { inputsArray } from '../../utils/inputsArray';
 
 const SignUpForm = ({ loginState: { isLogin, setisLogin } }) => {
@@ -129,26 +125,6 @@ const SignUpForm = ({ loginState: { isLogin, setisLogin } }) => {
         },
       }
     );
-    /* return loginUserHandle(data).then((res) => {
-      if (res.isSuccesful) {
-        setisSuccessRequest(true);
-        toast({
-          title: 'Login:',
-          description: res.message,
-          status: 'success',
-          isClosable: true,
-        });
-        setTimeout(() => onClose(), 1000);
-      } else {
-        setisSuccessRequest(false);
-        toast({
-          title: 'Login:',
-          description: res.message,
-          status: 'error',
-          isClosable: true,
-        });
-      }
-    }); */
   };
 
   const inputNames = isLogin ? ['email', 'contraseña'] : inputsArray;
@@ -159,7 +135,8 @@ const SignUpForm = ({ loginState: { isLogin, setisLogin } }) => {
       setError('email', { type: 'required' });
       alert('Por favor, escriba su email!');
     } else {
-      resetPassword(email);
+      // resetPassword(email);
+      console.log('reset password');
     }
   };
 

@@ -24,7 +24,8 @@ const useGetCategories = () => {
       return categories;
     },
 
-    staleTime: 1000 * 60,
+    staleTime: 1000 * 60 * 60 * 2,
+    cacheTime: 1000 * 60 * 60 * 2 + 1000 * 60 * 65,
   });
 
   return categoriesQuery;
