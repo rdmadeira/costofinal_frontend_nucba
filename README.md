@@ -1,10 +1,10 @@
-# Getting Started with Create React App
+# Proyecto Real de Frontend - React
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Proyecto construido con [Create React App](https://github.com/facebook/create-react-app). Para el bootcamp de Nucba, fullstack. El proyecto es un fork del proyecto real Costofinal, con modificaciones del backend utilizado. El proyecto original usaba Firebase Firestore para consultas y grabaciones de base de datos no relacional, y también Firebase functions para envío de emails. Para el proyecto final de Backend de Nucba, se adoptó MondoDB como base de datos usando relacciones por ID. El servidor fue creado en NodeJS con express y hospedada en Heroku para este mismo proyecto.
 
-## Available Scripts
+## Scripts usados
 
-In the project directory, you can run:
+En este proyecto, podes usar los siguientes scripts:
 
 ### `npm start`
 
@@ -39,32 +39,27 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
+## Dependencias usadas:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### React - create-react-app
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Redux - estado del cliente en Cart
 
-### Code Splitting
+### React-Router - single page application con react-router
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Axios - Axios instance en requests para hooks
 
-### Analyzing the Bundle Size
+### React-query / tanstack - Queries y mutations por medio de hooks para estado del lado del servidor;
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Crakra-ui - Template Sidebar With Header y componentes reutilizables;
 
-### Making a Progressive Web App
+### Reack-hook-form - Formularios de Login/signup y de actualizacion de datos del usuario
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Styled-components - UI components
 
-### Advanced Configuration
+### React-multi-carroussel - Carroussel de Home
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
+## API utilizada:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### API de [Costofinal_Backend_Nucba](https://costofinal-backend-810debfecaf4.herokuapp.com/api/v1/auth/reset-password) - creado en NodeJS con express, utiliza consultas y escrituras en MongoDB, por mongoose. 
