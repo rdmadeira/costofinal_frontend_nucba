@@ -67,8 +67,6 @@ export default function SidebarWithHeader() {
   /* const user = useSelector((store) => store.user); */
 
   useEffect(() => {
-    console.log('isError', isError);
-
     if (isError) {
       if (error?.response?.status === 401) {
         onOpenLogin();

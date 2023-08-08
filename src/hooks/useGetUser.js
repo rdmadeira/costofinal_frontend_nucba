@@ -4,10 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 const useGetUser = (options) => {
   const userAxios = useCostoAxios();
 
-  // Interceptors - para localStorage.getItem('authCF'):
   userAxios.interceptors.request.use((config) => {
-    const token = localStorage.getItem('authCF');
-    config.params = { token: token };
     if (options && options.complete) {
       config.params = { ...config.params, complete: true };
     }
