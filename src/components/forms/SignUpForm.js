@@ -136,7 +136,17 @@ const SignUpForm = ({ loginState: { isLogin, setisLogin } }) => {
       alert('Por favor, escriba su email!');
     } else {
       // resetPassword(email);
-      console.log('reset password');
+      fetch(`${process.env.REACT_APP_API_BASE_URL}auth/mailing?email=${email}`)
+        .then((res) => {
+          console.log('res', res);
+          alert(
+            'Solicitud enviada a su correo. Revisar la caja de entrada o de spam y click en el link indicado.'
+          );
+        })
+        .catch((error) => {
+          console.log('error', error);
+          alert('Ocurrió un error inesperado. ' + error.message);
+        });
     }
   };
 
