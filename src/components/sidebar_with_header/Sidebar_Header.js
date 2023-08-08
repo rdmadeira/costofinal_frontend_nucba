@@ -123,7 +123,9 @@ export default function SidebarWithHeader() {
           {isFetching || isRefetching ? (
             <VStack mt={'10'}>
               <Text color={'blue'}>
-                Sesión vencida... Aguarde un momento...
+                {isError
+                  ? 'Sesión vencida... Aguarde un momento...'
+                  : 'Aguarde un momento...'}
               </Text>
               <Spinner
                 thickness="4px"

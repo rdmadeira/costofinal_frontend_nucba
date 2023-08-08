@@ -62,7 +62,11 @@ const Orders = () => {
 
       {isFetching || isRefetching ? (
         <VStack mt={'10'}>
-          <Text color={'blue'}>Aguarde un momento...</Text>
+          <Text color={'blue'}>
+            {isOrdersError
+              ? 'Sessión vencida... Aguarde un momento...'
+              : 'Aguarde un momento...'}
+          </Text>
           <Spinner
             thickness="4px"
             speed="0.65s"
