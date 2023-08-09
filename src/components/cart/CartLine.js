@@ -12,14 +12,14 @@ const CartLine = ({ cartItem, formatPrices }) => {
 
   useEffect(() => {
     const updatedCart = cart.map((item) => {
-      if (item.id === cartItem.id) return { ...item, quantity: cantidad };
+      if (item._id === cartItem._id) return { ...item, quantity: cantidad };
       return item;
     });
     dispatch(updateCartAction(updatedCart));
   }, [cantidad]);
 
   const deleteItem = (item) => {
-    const updatedCart = cart.filter((cartItem) => cartItem.id !== item.id);
+    const updatedCart = cart.filter((cartItem) => cartItem._id !== item._id);
     dispatch(updateCartAction(updatedCart));
   };
 
