@@ -29,9 +29,13 @@ const useGetUser = (options) => {
       localStorage.removeItem('authCF');
     },
     retry: (failureCount, error) => {
-      console.log('failureCount', failureCount);
-      console.log('error', error);
-      return failureCount < 2 && error.response.status === 401;
+      if (failureCount < 2 && error?.response?.status === 401) {
+        return true;
+      } else if (failureCount < 3 && error?.response?.status !== 401) {
+        return true;
+      } else {
+        return false;
+      }
     },
     retryDelay: 1000,
     staleTime: 60 * 60 * 1000,
