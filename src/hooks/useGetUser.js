@@ -25,7 +25,12 @@ const useGetUser = (options) => {
 
       localStorage.removeItem('authCF');
     },
-
+    retry: (failureCount, error) => {
+      console.log('failureCount', failureCount);
+      console.log('error', error);
+      return failureCount < 2 && error.response.status === 401;
+    },
+    retryDelay: 1000,
     staleTime: 60 * 60 * 1000,
     cacheTime: 60 * 60 * 1000 + 10 * 60 * 1000,
   });

@@ -255,15 +255,19 @@ const MobileNav = ({
     }, 800);
   };
 
+  const bgColor = useColorModeValue('white', 'gray.900');
+  const borderColor = useColorModeValue('gray.200', 'gray.700');
+  const bgColorFlex = useColorModeValue('gray.50', 'gray.900');
+
   return (
     <Flex
       ml={{ base: 0, md: 52 }}
       px={{ base: 4, md: 4 }}
       height="16"
       alignItems="center"
-      bg={useColorModeValue('green.50', 'gray.900')}
+      bg={bgColorFlex}
       borderBottomWidth="1px"
-      borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
+      borderBottomColor={borderColor}
       justifyContent={{ base: 'space-between', md: 'flex-end' }}
       {...rest}>
       <IconButton
@@ -323,9 +327,7 @@ const MobileNav = ({
                     </Box>
                   </HStack>
                 </MenuButton>
-                <MenuList
-                  bg={useColorModeValue('white', 'gray.900')}
-                  borderColor={useColorModeValue('gray.200', 'gray.700')}>
+                <MenuList bg={bgColor} borderColor={borderColor}>
                   <VStack
                     display={{ base: 'flex', md: 'none' }}
                     alignItems="flex-start"
